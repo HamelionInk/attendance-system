@@ -4,6 +4,8 @@ import com.codeinside.attendancesystem.dto.request.RequestLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
 import com.codeinside.attendancesystem.service.LessonService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -74,16 +77,20 @@ public class LessonController {
         return ResponseEntity.ok(responseLessonDtoList);
     }
 
-    @Operation(summary = "Получить список занятий в школе")
+    @Operation(summary = "Получить список занятий в школе, для пагинации используются необязательные параметры offset и limit")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Список занятий найден - OK",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ResponseLessonDto.class)) }),
             @ApiResponse(responseCode = "404", description = "Список занятий пустой - Not Found",
                     content = @Content) })
+    @Parameters(value = {
+            @Parameter(name = "offset", description = "Сколько строк нужно пропустить"),
+            @Parameter(name = "limit", description = "Ограничение на количество получаемых данных после offset") })
     @GetMapping("/all")
-    public ResponseEntity<List<ResponseLessonDto>> getLessons() {
-        List<ResponseLessonDto> responseLessonDtoList = lessonService.getLessons();
+    public ResponseEntity<List<ResponseLessonDto>> getLessons(@RequestParam(name = "offset", required = false) Long offset,
+                                                              @RequestParam (name = "limit", required = false) Long limit) {
+        List<ResponseLessonDto> responseLessonDtoList = lessonService.getLessons(offset, limit);
         return ResponseEntity.ok(responseLessonDtoList);
     }
 

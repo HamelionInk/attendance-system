@@ -13,9 +13,11 @@ public class RequestGroupDto {
     @Min(value = 6)
     @Max(value = 100)
     private Integer maxAge;
+
     @Min(value = 6)
     @Max(value = 100)
     private Integer minAge;
+
     private Integer numberOfStudents;
 
     public String getGroupName() {

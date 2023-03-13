@@ -1,5 +1,6 @@
 package com.codeinside.attendancesystem.repository;
 
+import com.codeinside.attendancesystem.entity.Coach;
 import com.codeinside.attendancesystem.entity.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -7,14 +8,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
     @Modifying
     @Query(
-            value = "UPDATE students SET group_id= :groupId WHERE id= :studentId",
+            value = "SELECT * FROM groups OFFSET :offset LIMIT :limit ",
             nativeQuery = true
     )
-    void updateGroupIdForStudent(@Param("groupId") Long groupId,
-                                 @Param("studentId") Long studentId);
+    List<Group> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
+                                            @Param(value = "limit") Long limit);
+
 }

@@ -5,6 +5,8 @@ import com.codeinside.attendancesystem.dto.response.ResponseCoachDto;
 import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.service.GroupService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -54,16 +56,21 @@ public class GroupController {
         return ResponseEntity.ok(responseGroupDto);
     }
 
-    @Operation(summary = "Получить информацию о всех группах")
+    @Operation(summary = "Получить информацию о всех группах, для пагинации используются необязательные параметры offset и limit")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Список групп найден - OK",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ResponseGroupDto.class)) }),
             @ApiResponse(responseCode = "404", description = "Список групп пустой - Not Found",
                     content = @Content) })
+    @Parameters(value = {
+            @Parameter(name = "offset", description = "Сколько строк нужно пропустить"),
+            @Parameter(name = "limit", description = "Ограничение на количество получаемых данных после offset") })
     @GetMapping("/all")
-    public ResponseEntity<List<ResponseGroupDto>> getGroups() {
-        return null;
+    public ResponseEntity<List<ResponseGroupDto>> getGroups(@RequestParam (name = "offset", required = false) Long offset,
+                                                            @RequestParam (name = "limit", required = false) Long limit) {
+        List<ResponseGroupDto> responseGroupDtos = groupService.getGroups(offset, limit);
+        return ResponseEntity.ok(responseGroupDtos);
     }
 
     @Operation(summary = "Удалить группу по ее 'id'")
@@ -93,22 +100,6 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Добавить студента по его 'id' к группе по ее 'id'")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Студент добавлен в группу - OK",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Группа или студент с таким 'id' не найдена - Not Found",
-                    content = @Content),
-            @ApiResponse(responseCode = "400", description = "Группа уже содержит максимальное количество участников" +
-                    " или возраст студента слишком большой для группы - Bad Request",
-                    content = @Content) })
-    @PostMapping("/{group_id}/student/{student_id}")
-    public ResponseEntity<?> addStudentForGroup(@PathVariable (value = "student_id") Long studentId,
-                                                @PathVariable (value = "group_id") Long groupId) {
-        groupService.addStudentForGroup(studentId, groupId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @Operation(summary = "Создать группу")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа создана - OK",
@@ -119,18 +110,6 @@ public class GroupController {
     @PostMapping()
     public ResponseEntity<?> saveGroup(@RequestBody @Valid RequestGroupDto requestGroupDto) {
         groupService.saveGroup(requestGroupDto);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Operation(summary = "Удалить студента по его 'id' из группы")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа удалена - OK",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Группа с таким 'id' не найдена - Not Found",
-                    content = @Content) })
-    @DeleteMapping("/student/{id}")
-    public ResponseEntity<?> deleteStudentForGroup(@PathVariable (name = "id") Long id) {
-        groupService.deleteStudentForGroup(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

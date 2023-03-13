@@ -8,10 +8,8 @@ import java.util.List;
 public interface GroupService {
 
     void saveGroup(RequestGroupDto requestGroupDto);
-    void addStudentForGroup(Long studentId, Long groupId);
     ResponseGroupDto getGroup(Long groupId);
-    List<ResponseGroupDto> getGroups();
+    List<ResponseGroupDto> getGroups(Long offset, Long limit);
     void deleteGroup(Long id);
     void updateGroup(RequestGroupDto requestGroupDto, Long id);
-    void deleteStudentForGroup(Long studentId);
 }

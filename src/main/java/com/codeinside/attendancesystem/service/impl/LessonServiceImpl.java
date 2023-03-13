@@ -99,8 +99,8 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<ResponseLessonDto> getLessons() {
-        List<Lesson> lessons = lessonRepository.findAll();
+    public List<ResponseLessonDto> getLessons(Long offset, Long limit) {
+        List<Lesson> lessons = lessonRepository.selectAllWithOffsetAndLimit(offset, limit);
         if(lessons.isEmpty()) {
             throw new LessonNotFoundException();
         }

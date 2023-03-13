@@ -33,34 +33,6 @@ public class GroupServiceImpl implements GroupService {
         this.groupMapper = groupMapper;
     }
 
-    @Transactional
-    @Override
-    public void addStudentForGroup(Long studentId, Long groupId) {
-        Optional<Group> groupOptional = groupRepository.findById(groupId);
-        Group group = groupOptional.orElseThrow(GroupNotFoundException::new);
-
-        Optional<Student> studentOptional = studentRepository.findById(studentId);
-        Student student = studentOptional.orElseThrow(StudentNotFoundException::new);
-
-        if(!checkRangeAge(group.getMinAge(), group.getMaxAge(), student.getPerson().getAge())) {
-            throw new OutOfRangeAgeException();
-        }
-
-        if(!checkOutOfNumberOfStudents(group.getStudents().size(), group.getNumberOfStudents())) {
-            throw new OutOfNumberOfStudentsException();
-        }
-
-        groupRepository.updateGroupIdForStudent(groupId, studentId);
-    }
-
-    private Boolean checkOutOfNumberOfStudents(int numbersOfStudent, int limitStudents) {
-        return numbersOfStudent <= limitStudents;
-    }
-
-    private Boolean checkRangeAge(int min, int max, int init) {
-        return init >= min && init <= max;
-    }
-
     @Override
     public void saveGroup(RequestGroupDto requestGroupDto) {
         Group group = groupMapper.requestGroupDtoToGroup(requestGroupDto);
@@ -78,13 +50,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<ResponseGroupDto> getGroups() {
-        List<Group> groupList= groupRepository.findAll();
+    public List<ResponseGroupDto> getGroups(Long offset, Long limit) {
+        List<Group> groupList = groupRepository.selectAllWithOffsetAndLimit(offset, limit);
+        if(groupList.isEmpty()) {
+            throw new GroupNotFoundException();
+        }
         return groupMapper.GroupListToResponseGroupListDto(groupList);
     }
 
     @Override
     public void deleteGroup(Long id) {
+        getGroup(id);
         groupRepository.deleteById(id);
     }
 
@@ -96,10 +72,5 @@ public class GroupServiceImpl implements GroupService {
         }
         Group group = groupMapper.requestGroupDtoToGroupForPatch(requestGroupDto, groupOptional.get());
         groupRepository.save(group);
-    }
-
-    @Override
-    public void deleteStudentForGroup(Long studentId) {
-
     }
 }

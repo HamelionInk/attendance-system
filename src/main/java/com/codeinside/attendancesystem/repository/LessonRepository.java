@@ -1,5 +1,6 @@
 package com.codeinside.attendancesystem.repository;
 
+import com.codeinside.attendancesystem.entity.Coach;
 import com.codeinside.attendancesystem.entity.Lesson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -25,5 +26,13 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     )
     void updateEndOfClass(@Param(value = "id") Long id,
                           @Param(value = "flag") Boolean flag);
+
+    @Modifying
+    @Query(
+            value = "SELECT * FROM lessons OFFSET :offset LIMIT :limit ",
+            nativeQuery = true
+    )
+    List<Lesson> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
+                                            @Param(value = "limit") Long limit);
 
 }

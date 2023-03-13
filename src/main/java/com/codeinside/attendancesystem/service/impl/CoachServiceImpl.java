@@ -29,15 +29,13 @@ public class CoachServiceImpl implements CoachService {
     @Override
     public ResponseCoachDto getCoach(Long id) {
         Optional<Coach> coachOptional = coachRepository.findById(id);
-
         Coach coach = coachOptional.orElseThrow(CoachNotFoundException::new);
         return coachMapper.coachToResponseCoachDto(coach);
     }
 
     @Override
-    public List<ResponseCoachDto> getCoaches() {
-        List<Coach> coaches = coachRepository.findAll();
-
+    public List<ResponseCoachDto> getCoaches(Long offset, Long limit) {
+        List<Coach> coaches = coachRepository.selectAllWithOffsetAndLimit(offset, limit);
         if(coaches.isEmpty()) {
             throw new CoachNotFoundException();
         }

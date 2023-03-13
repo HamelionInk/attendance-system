@@ -8,8 +8,10 @@ import java.util.List;
 public interface StudentService {
 
     void saveStudent(RequestStudentDto requestStudentDto);
-    List<ResponseStudentDto> getAllStudents();
+    void addStudentForGroup(Long studentId, Long groupId);
+    List<ResponseStudentDto> getStudents(Long offset, Long limit);
     ResponseStudentDto getStudent(Long id);
     void updateStudent(RequestStudentDto requestStudentDto, Long id);
     void deleteStudent(Long id);
+    void deleteStudentForGroup(Long studentId);
 }

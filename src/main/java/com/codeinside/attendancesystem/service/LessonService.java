@@ -9,7 +9,7 @@ public interface LessonService {
 
     void saveLesson(RequestLessonDto requestLessonDto);
     ResponseLessonDto getLesson(Long id);
-    List<ResponseLessonDto> getLessons();
+    List<ResponseLessonDto> getLessons(Long offset, Long limit);
     List<ResponseLessonDto> getLessonsForStudent(Long studentId);
     void deleteLesson(Long id);
     void updateLesson(RequestLessonDto requestLessonDto, Long id);
