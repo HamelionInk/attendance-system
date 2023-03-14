@@ -1,10 +1,13 @@
 package com.codeinside.attendancesystem.dto.response;
 
+import java.util.List;
+
 public class ResponseStudentDto {
 
     private Long id;
     private ResponsePersonDto person;
     private Long groupId;
+    private List<ResponseAttendanceDto> attendances;
 
     public Long getId() {
         return id;
@@ -28,5 +31,13 @@ public class ResponseStudentDto {
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
+    }
+
+    public List<ResponseAttendanceDto> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<ResponseAttendanceDto> attendances) {
+        this.attendances = attendances;
     }
 }

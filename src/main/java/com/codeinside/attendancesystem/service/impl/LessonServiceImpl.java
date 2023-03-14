@@ -3,11 +3,8 @@ package com.codeinside.attendancesystem.service.impl;
 import com.codeinside.attendancesystem.dto.request.RequestLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
-import com.codeinside.attendancesystem.entity.Attendance;
 import com.codeinside.attendancesystem.entity.Lesson;
 import com.codeinside.attendancesystem.entity.Group;
-import com.codeinside.attendancesystem.entity.Student;
-import com.codeinside.attendancesystem.exception.LessonDateMatchesException;
 import com.codeinside.attendancesystem.exception.LessonNotFoundException;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.mapper.LessonMapper;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -63,30 +59,8 @@ public class LessonServiceImpl implements LessonService {
         calendar.add(Calendar.HOUR, 1);
         lesson.setEndDate(calendar.getTime());
 
-        if(checkDateClassForMatches(group.getClasses(), lesson.getStartDate())) {
-            lessonRepository.save(lesson);
-        } else {
-            throw new LessonDateMatchesException();
-        }
+        lessonRepository.save(lesson);
         attendanceService.initializationAttendanceEntity(group.getStudents(), lesson.getId());
-    }
-
-
-
-    public Boolean checkDateClassForMatches(List<Lesson> lessonList, Date currentDateForClasses) {
-        boolean flag = false;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        if(lessonList.isEmpty()) {
-            return true;
-        }
-
-        for(Lesson lesson : lessonList) {
-            String currentDate = simpleDateFormat.format(currentDateForClasses);
-            String classDate = simpleDateFormat.format(lesson.getStartDate());
-            flag = !classDate.equals(currentDate);
-        }
-        return flag;
     }
 
     @Override
@@ -104,7 +78,7 @@ public class LessonServiceImpl implements LessonService {
         if(lessons.isEmpty()) {
             throw new LessonNotFoundException();
         }
-        return lessonMapper.lessonListToResponseLessonListDto(lessons);
+        return lessonMapper.lessonsToResponseLessonDtos(lessons);
     }
 
     @Transactional
@@ -112,7 +86,7 @@ public class LessonServiceImpl implements LessonService {
     public List<ResponseLessonDto> getLessonsForStudent(Long studentId) {
         ResponseStudentDto responseStudentDto = studentService.getStudent(studentId);
         List<Lesson> lessonList = lessonRepository.selectClassesByGroupId(responseStudentDto.getGroupId());
-        return lessonMapper.lessonListToResponseLessonListDto(lessonList);
+        return lessonMapper.lessonsToResponseLessonDtos(lessonList);
     }
 
     @Override
@@ -136,8 +110,14 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Transactional
+    @Override
+    public void updateAttendanceLessonForStudent(Long lessonId, Long studentId, Boolean attendance) {
+        lessonRepository.updateAttendanceLessonForStudent(lessonId, studentId, attendance);
+    }
+
+    @Transactional
     @Scheduled(cron = "0 0 * * * *")
-    public void endClass() {
+    public void endLesson() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<Lesson> lessons = lessonRepository.findAll();
         lessons.forEach(data -> {

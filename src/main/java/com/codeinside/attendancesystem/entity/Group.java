@@ -35,7 +35,7 @@ public class Group {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
-    private List<Lesson> aClasses;
+    private List<Lesson> lessons;
 
     public Long getId() {
         return id;
@@ -53,27 +53,27 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public int getMaxAge() {
+    public Integer getMaxAge() {
         return maxAge;
     }
 
-    public void setMaxAge(int maxAge) {
+    public void setMaxAge(Integer maxAge) {
         this.maxAge = maxAge;
     }
 
-    public int getMinAge() {
+    public Integer getMinAge() {
         return minAge;
     }
 
-    public void setMinAge(int minAge) {
+    public void setMinAge(Integer minAge) {
         this.minAge = minAge;
     }
 
-    public int getNumberOfStudents() {
+    public Integer getNumberOfStudents() {
         return numberOfStudents;
     }
 
-    public void setNumberOfStudents(int numberOfStudents) {
+    public void setNumberOfStudents(Integer numberOfStudents) {
         this.numberOfStudents = numberOfStudents;
     }
 
@@ -85,11 +85,11 @@ public class Group {
         this.students = students;
     }
 
-    public List<Lesson> getClasses() {
-        return aClasses;
+    public List<Lesson> getLessons() {
+        return lessons;
     }
 
-    public void setClasses(List<Lesson> aClasses) {
-        this.aClasses = aClasses;
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
     }
 }

@@ -39,7 +39,7 @@ public class CoachServiceImpl implements CoachService {
         if(coaches.isEmpty()) {
             throw new CoachNotFoundException();
         }
-        return coachMapper.coachListToResponseCoachListDto(coaches);
+        return coachMapper.coachesToResponseCoachDtos(coaches);
     }
 
     @Override
@@ -52,11 +52,10 @@ public class CoachServiceImpl implements CoachService {
     @Override
     public void deleteCoach(Long id) {
         Optional<Coach> coachOptional = coachRepository.findById(id);
-        if(coachOptional.isPresent()) {
-            coachRepository.deleteById(id);
-        } else {
+        if(coachOptional.isEmpty()) {
             throw new CoachNotFoundException();
         }
+        coachRepository.deleteById(id);
     }
 
     @Override

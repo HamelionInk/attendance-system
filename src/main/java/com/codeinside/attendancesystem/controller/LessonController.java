@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -46,7 +46,7 @@ public class LessonController {
                     " - Bad Request",
                     content = @Content) })
     @PostMapping
-    public ResponseEntity<?> saveLesson(@RequestBody RequestLessonDto requestLessonDto) {
+    public ResponseEntity<?> saveLesson(@RequestBody @Valid RequestLessonDto requestLessonDto) {
         lessonService.saveLesson(requestLessonDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -106,6 +106,23 @@ public class LessonController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "Обновить присутствие студента по его 'id' и по 'id' занятия")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Присутсвие обновлено - OK",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Занятия или студент с таким 'id' не найдено - Not Found",
+                    content = @Content) })
+    @Parameters(
+            @Parameter(name = "attendance", description = "true - студент присутствует, false - студент отсутствует, " +
+                    "null - студент прогулял"))
+    @PatchMapping("/{lessonId}/student/{studentId}")
+    public ResponseEntity<?> updateAttendanceLessonForStudent(@PathVariable (name = "lessonId") Long lessonId,
+                                                              @PathVariable (name = "studentId") Long studentId,
+                                                              @RequestParam (name = "attendance", required = false) Boolean attendance) {
+        lessonService.updateAttendanceLessonForStudent(lessonId, studentId, attendance);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @Operation(summary = "Обновить информацию о занятии по его 'id'")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Занятие обновлено - OK",
@@ -117,7 +134,7 @@ public class LessonController {
                     content = @Content) })
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateLesson(@PathVariable ( name = "id") Long id,
-                                          @RequestBody RequestLessonDto requestLessonDto) {
+                                          @RequestBody @Valid RequestLessonDto requestLessonDto) {
         lessonService.updateLesson(requestLessonDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

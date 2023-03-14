@@ -13,7 +13,7 @@ import java.util.List;
 public interface PersonMapper {
 
     ResponsePersonDto personToResponsePersonDto(Person person);
-    List<ResponsePersonDto> personListToResponsePersonListDto(List<Person> persons);
+    List<ResponsePersonDto> personsToResponsePersonDtos(List<Person> persons);
     Person requestPersonDtoToPerson(RequestPersonDto requestPersonDto);
     Person requestPersonDtoToPersonForPatch(RequestPersonDto requestPersonDto, @MappingTarget Person person);
 

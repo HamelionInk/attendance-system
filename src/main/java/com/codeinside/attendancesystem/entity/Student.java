@@ -58,4 +58,12 @@ public class Student {
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
 }

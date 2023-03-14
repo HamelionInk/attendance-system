@@ -13,7 +13,7 @@ import java.util.List;
 public interface CoachMapper {
 
     ResponseCoachDto coachToResponseCoachDto(Coach coach);
-    List<ResponseCoachDto> coachListToResponseCoachListDto(List<Coach> coaches);
+    List<ResponseCoachDto> coachesToResponseCoachDtos(List<Coach> coaches);
     Coach requestCoachDtoToCoach(RequestCoachDto requestCoachDto);
     Coach requestCoachDtoToCoachForPatch(RequestCoachDto requestCoachDto, @MappingTarget Coach coach);
 

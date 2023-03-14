@@ -7,6 +7,7 @@ import java.util.List;
 
 public class ResponseLessonDto {
 
+    private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -15,6 +16,14 @@ public class ResponseLessonDto {
     private String coachName;
     private Boolean lessonFinish;
     private Long groupId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     private List<ResponseAttendanceDto> attendances;
 

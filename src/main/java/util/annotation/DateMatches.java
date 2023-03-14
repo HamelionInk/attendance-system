@@ -1,6 +1,7 @@
 package util.annotation;
 
-import util.validator.MinMaxAgeValidator;
+import util.validator.DateMatchesValidator;
+import util.validator.MinValueLessMaxValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,10 +13,10 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = MinMaxAgeValidator.class)
+@Constraint(validatedBy = DateMatchesValidator.class)
 @Documented
-public @interface MinMaxAgeValid {
-    String message() default "Минимальное значение не может быть больше максимального";
+public @interface DateMatches {
+    String message() default "Число для занятия уже занято";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

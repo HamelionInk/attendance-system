@@ -21,6 +21,14 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Modifying
     @Query(
+            value = "SELECT * FROM lessons OFFSET :offset LIMIT :limit ",
+            nativeQuery = true
+    )
+    List<Lesson> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
+                                             @Param(value = "limit") Long limit);
+
+    @Modifying
+    @Query(
             value = "UPDATE lessons SET lesson_finish= :flag WHERE id= :id",
             nativeQuery = true
     )
@@ -29,10 +37,10 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Modifying
     @Query(
-            value = "SELECT * FROM lessons OFFSET :offset LIMIT :limit ",
+            value = "UPDATE attendance SET attendance= :attendance WHERE lesson_id= :lessonId AND student_id= :studentId",
             nativeQuery = true
     )
-    List<Lesson> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
-                                            @Param(value = "limit") Long limit);
-
+    void updateAttendanceLessonForStudent(@Param(value = "lessonId") Long lessonId,
+                                          @Param(value = "studentId") Long studentId,
+                                          @Param(value = "attendance") Boolean attendance);
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public interface GroupMapper {
 
     ResponseGroupDto groupToResponseGroupDto(Group group);
-    List<ResponseGroupDto> GroupListToResponseGroupListDto(List<Group> groupList);
+    List<ResponseGroupDto> GroupsToResponseGroupDtos(List<Group> groupList);
     Group requestGroupDtoToGroup(RequestGroupDto requestGroupDto);
     Group requestGroupDtoToGroupForPatch(RequestGroupDto requestGroupDto, @MappingTarget Group group);
 

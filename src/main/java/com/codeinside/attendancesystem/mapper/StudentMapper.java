@@ -15,6 +15,6 @@ public interface StudentMapper {
     Student requestStudentDtoToStudent(RequestStudentDto requestStudentDto);
     Student requestStudentDtoToStudentForPatch(RequestStudentDto requestStudentDto, @MappingTarget Student student);
 
-    List<ResponseStudentDto> StudentListToResponseStudentListDto(List<Student> students);
+    List<ResponseStudentDto> StudentsToResponseStudentDtos(List<Student> students);
     ResponseStudentDto StudentToResponseStudentDto(Student student);
 }

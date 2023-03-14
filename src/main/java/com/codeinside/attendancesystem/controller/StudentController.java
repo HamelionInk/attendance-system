@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -44,7 +45,7 @@ public class StudentController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
                     content = @Content) })
     @PostMapping
-    public ResponseEntity<?> saveStudent(@RequestBody RequestStudentDto requestStudentDto) {
+    public ResponseEntity<?> saveStudent(@RequestBody @Valid RequestStudentDto requestStudentDto) {
         studentService.saveStudent(requestStudentDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -105,21 +106,21 @@ public class StudentController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
                     content = @Content) })
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@RequestBody RequestStudentDto requestStudentDto,
+    public ResponseEntity<?> updateStudent(@RequestBody @Valid RequestStudentDto requestStudentDto,
                               @PathVariable (name = "id") Long id) {
         studentService.updateStudent(requestStudentDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Установить 'id' группы на null для студента по его 'id' ")
+    @Operation(summary = "Исключить студента из группы по 'id' студента")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа удалена - OK",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Группа с таким 'id' не найдена - Not Found",
                     content = @Content) })
     @PatchMapping("/student/{id}")
-    public ResponseEntity<?> deleteStudentForGroup(@PathVariable (name = "id") Long id) {
-        studentService.deleteStudentForGroup(id);
+    public ResponseEntity<?> excludeStudentForGroup(@PathVariable (name = "id") Long id) {
+        studentService.excludeStudentForGroup(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

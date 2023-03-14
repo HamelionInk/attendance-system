@@ -15,5 +15,5 @@ public interface LessonMapper {
     ResponseLessonDto LessonToResponseLessonDto(Lesson lesson);
     Lesson requestLessonDtoToLesson(RequestLessonDto requestLessonDto);
     Lesson requestLessonDtoToLessonForPatch(RequestLessonDto requestLessonDto, @MappingTarget Lesson lesson);
-    List<ResponseLessonDto> lessonListToResponseLessonListDto(List<Lesson> lessonList);
+    List<ResponseLessonDto> lessonsToResponseLessonDtos(List<Lesson> lessonList);
 }

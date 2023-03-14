@@ -1,6 +1,6 @@
 package com.codeinside.attendancesystem.exception.handler;
 
-import com.codeinside.attendancesystem.exception.LessonDateMatchesException;
+import com.codeinside.attendancesystem.exception.AdminNotFoundException;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.exception.LessonNotFoundException;
 import com.codeinside.attendancesystem.exception.OutOfNumberOfStudentsException;
@@ -71,11 +71,9 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler({ LessonDateMatchesException.class })
-    public ResponseEntity<?> handleClassesDateMatchesException(final  RuntimeException ex, final WebRequest request) {
-        final GenericResponseExceptionHandler bodyOfResponse = new GenericResponseExceptionHandler("Date for Class matches", "ClassesDateMatches");
-        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    @ExceptionHandler({ AdminNotFoundException.class })
+    public ResponseEntity<?> handleAdminNotFoundException(final RuntimeException ex, final WebRequest request) {
+        final GenericResponseExceptionHandler bodyOfResponse = new GenericResponseExceptionHandler("This Admin not found", "AdminNotFound");
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
-
-
 }

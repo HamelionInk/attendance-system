@@ -3,15 +3,12 @@ package com.codeinside.attendancesystem.service.impl;
 import com.codeinside.attendancesystem.dto.request.RequestStudentDto;
 import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
-import com.codeinside.attendancesystem.entity.Group;
 import com.codeinside.attendancesystem.entity.Student;
 import com.codeinside.attendancesystem.enums.TypeUser;
-import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.exception.OutOfNumberOfStudentsException;
 import com.codeinside.attendancesystem.exception.OutOfRangeAgeException;
 import com.codeinside.attendancesystem.exception.StudentNotFoundException;
 import com.codeinside.attendancesystem.mapper.StudentMapper;
-import com.codeinside.attendancesystem.repository.GroupRepository;
 import com.codeinside.attendancesystem.repository.StudentRepository;
 import com.codeinside.attendancesystem.service.GroupService;
 import com.codeinside.attendancesystem.service.StudentService;
@@ -74,7 +71,7 @@ public class StudentServiceImpl implements StudentService {
         if(students.isEmpty()) {
             throw new StudentNotFoundException();
         }
-        return studentMapper.StudentListToResponseStudentListDto(students);
+        return studentMapper.StudentsToResponseStudentDtos(students);
     }
 
     @Override
@@ -107,11 +104,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Transactional
     @Override
-    public void deleteStudentForGroup(Long studentId) {
+    public void excludeStudentForGroup(Long studentId) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
         if(studentOptional.isEmpty()) {
             throw new StudentNotFoundException();
         }
-        studentRepository.updateGroupIdOnNullForStudent(studentId);
+        studentRepository.updateGroupIdValueOnNullForStudent(studentId);
     }
 }
