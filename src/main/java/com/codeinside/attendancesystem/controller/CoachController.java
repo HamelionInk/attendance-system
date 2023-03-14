@@ -102,7 +102,7 @@ public class CoachController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
                     content = @Content) })
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateCoach(@RequestBody @Valid RequestCoachDto requestCoachDto,
+    public ResponseEntity<?> updateCoach(@RequestBody RequestCoachDto requestCoachDto,
                                          @PathVariable (name = "id") Long id) {
         coachService.updateCoach(requestCoachDto, id);
         return new ResponseEntity<>(HttpStatus.OK);

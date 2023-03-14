@@ -94,7 +94,7 @@ public class GroupController {
                     content = @Content) })
     @PatchMapping("/{id}")
     // Обновить информацию о группе
-    public ResponseEntity<?> updateGroup(@RequestBody @Valid RequestGroupDto requestGroupDto,
+    public ResponseEntity<?> updateGroup(@RequestBody RequestGroupDto requestGroupDto,
                                          @PathVariable (name = "id") Long id) {
         groupService.updateGroup(requestGroupDto, id);
         return new ResponseEntity<>(HttpStatus.OK);

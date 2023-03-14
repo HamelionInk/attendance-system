@@ -106,7 +106,7 @@ public class StudentController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
                     content = @Content) })
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@RequestBody @Valid RequestStudentDto requestStudentDto,
+    public ResponseEntity<?> updateStudent(@RequestBody RequestStudentDto requestStudentDto,
                               @PathVariable (name = "id") Long id) {
         studentService.updateStudent(requestStudentDto, id);
         return new ResponseEntity<>(HttpStatus.OK);

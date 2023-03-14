@@ -134,7 +134,7 @@ public class LessonController {
                     content = @Content) })
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateLesson(@PathVariable ( name = "id") Long id,
-                                          @RequestBody @Valid RequestLessonDto requestLessonDto) {
+                                          @RequestBody RequestLessonDto requestLessonDto) {
         lessonService.updateLesson(requestLessonDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
