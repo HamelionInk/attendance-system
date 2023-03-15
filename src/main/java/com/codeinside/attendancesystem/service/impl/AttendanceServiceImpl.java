@@ -4,19 +4,17 @@ import com.codeinside.attendancesystem.entity.Attendance;
 import com.codeinside.attendancesystem.entity.Student;
 import com.codeinside.attendancesystem.repository.AttendanceRepository;
 import com.codeinside.attendancesystem.service.AttendanceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
-
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository) {
-        this.attendanceRepository = attendanceRepository;
-    }
 
     @Override
     public void createAttendanceStudentsForLesson(List<Attendance> attendances) {

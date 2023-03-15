@@ -13,7 +13,7 @@ import com.codeinside.attendancesystem.mapper.StudentMapper;
 import com.codeinside.attendancesystem.repository.StudentRepository;
 import com.codeinside.attendancesystem.service.GroupService;
 import com.codeinside.attendancesystem.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +21,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
     private final StudentMapper studentMapper;
     private final StudentRepository studentRepository;
     private final GroupService groupService;
-
-    @Autowired
-    public StudentServiceImpl(StudentMapper studentMapper, StudentRepository studentRepository, GroupService groupService) {
-        this.studentMapper = studentMapper;
-        this.studentRepository = studentRepository;
-        this.groupService = groupService;
-    }
 
     @Override
     public void saveStudent(RequestStudentDto requestStudentDto) {

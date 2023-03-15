@@ -8,23 +8,18 @@ import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.mapper.GroupMapper;
 import com.codeinside.attendancesystem.repository.GroupRepository;
 import com.codeinside.attendancesystem.service.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
-
-    @Autowired
-    public GroupServiceImpl(GroupRepository groupRepository, GroupMapper groupMapper) {
-        this.groupRepository = groupRepository;
-        this.groupMapper = groupMapper;
-    }
 
     @Override
     public void saveGroup(RequestGroupDto requestGroupDto) {

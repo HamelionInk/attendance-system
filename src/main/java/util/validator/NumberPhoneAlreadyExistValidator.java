@@ -3,21 +3,17 @@ package util.validator;
 import com.codeinside.attendancesystem.dto.request.post.RequestPersonDto;
 import com.codeinside.attendancesystem.entity.Person;
 import com.codeinside.attendancesystem.repository.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import util.annotation.NumberPhoneAlreadyExist;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class NumberPhoneAlreadyExistValidator implements ConstraintValidator<NumberPhoneAlreadyExist, Object> {
 
     private final PersonRepository personRepository;
-
-    @Autowired
-    public NumberPhoneAlreadyExistValidator(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
 
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {

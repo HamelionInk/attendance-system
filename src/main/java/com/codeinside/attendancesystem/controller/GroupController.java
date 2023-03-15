@@ -11,10 +11,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,15 +29,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/groups")
-@Validated
+@RequiredArgsConstructor
 public class GroupController {
 
     private final GroupService groupService;
-
-    @Autowired
-    public GroupController(GroupService groupService) {
-        this.groupService = groupService;
-    }
 
     @Operation(summary = "Создать группу - Доступы: ADMIN")
     @ApiResponses(value = {

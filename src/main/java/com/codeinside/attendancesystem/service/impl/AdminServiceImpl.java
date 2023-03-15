@@ -9,23 +9,18 @@ import com.codeinside.attendancesystem.exception.AdminNotFoundException;
 import com.codeinside.attendancesystem.mapper.AdminMapper;
 import com.codeinside.attendancesystem.repository.AdminRepository;
 import com.codeinside.attendancesystem.service.AdminService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
     private final AdminMapper adminMapper;
-
-    @Autowired
-    public AdminServiceImpl(AdminRepository adminRepository, AdminMapper adminMapper) {
-        this.adminRepository = adminRepository;
-        this.adminMapper = adminMapper;
-    }
 
     @Override
     public void saveAdmin(RequestAdminDto requestAdminDto) {

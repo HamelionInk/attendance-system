@@ -9,23 +9,18 @@ import com.codeinside.attendancesystem.exception.CoachNotFoundException;
 import com.codeinside.attendancesystem.mapper.CoachMapper;
 import com.codeinside.attendancesystem.repository.CoachRepository;
 import com.codeinside.attendancesystem.service.CoachService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CoachServiceImpl implements CoachService {
 
     private final CoachMapper coachMapper;
     private final CoachRepository coachRepository;
-
-    @Autowired
-    public CoachServiceImpl(CoachMapper coachMapper, CoachRepository coachRepository) {
-        this.coachMapper = coachMapper;
-        this.coachRepository = coachRepository;
-    }
 
     @Override
     public void saveCoach(RequestCoachDto requestCoachDto) {

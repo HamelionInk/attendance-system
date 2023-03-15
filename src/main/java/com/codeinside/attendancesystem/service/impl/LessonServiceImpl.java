@@ -15,7 +15,7 @@ import com.codeinside.attendancesystem.repository.LessonRepository;
 import com.codeinside.attendancesystem.service.AttendanceService;
 import com.codeinside.attendancesystem.service.LessonService;
 import com.codeinside.attendancesystem.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class LessonServiceImpl implements LessonService {
 
     private final LessonMapper lessonMapper;
@@ -35,17 +36,6 @@ public class LessonServiceImpl implements LessonService {
     private final GroupRepository groupRepository;
     private final StudentService studentService;
     private final AttendanceService attendanceService;
-
-    @Autowired
-    public LessonServiceImpl(LessonMapper lessonMapper, LessonRepository lessonRepository,
-                             GroupRepository groupRepository, StudentService studentService,
-                             AttendanceService attendanceService) {
-        this.lessonMapper = lessonMapper;
-        this.lessonRepository = lessonRepository;
-        this.groupRepository = groupRepository;
-        this.studentService = studentService;
-        this.attendanceService = attendanceService;
-    }
 
     @Override
     public void saveLesson(RequestLessonDto requestLessonDto) {

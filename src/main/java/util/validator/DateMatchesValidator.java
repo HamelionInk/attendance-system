@@ -4,7 +4,7 @@ import com.codeinside.attendancesystem.dto.request.post.RequestLessonDto;
 import com.codeinside.attendancesystem.entity.Lesson;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.repository.GroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import util.annotation.DateMatches;
 
 import javax.validation.ConstraintValidator;
@@ -12,14 +12,10 @@ import javax.validation.ConstraintValidatorContext;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class DateMatchesValidator implements ConstraintValidator<DateMatches, Object> {
 
     private final GroupRepository groupRepository;
-
-    @Autowired
-    public DateMatchesValidator(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
-    }
 
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
