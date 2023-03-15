@@ -1,4 +1,4 @@
-package com.codeinside.attendancesystem.dto.request;
+package com.codeinside.attendancesystem.dto.request.post;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import util.annotation.DateMatches;

@@ -1,6 +1,5 @@
 package com.codeinside.attendancesystem.config.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,22 +37,17 @@ public class SecurityConfig {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/students/*/group/*").hasAuthority("TRAINER")
+                .antMatchers(HttpMethod.POST, "/students/*/group/*").hasAnyAuthority("TRAINER", "ADMIN")
                 .antMatchers(HttpMethod.PATCH,
                         "/students/student/*",
-                        "/lesson/all",
-                        "/students/all",
-                        "/lessons/*"
-                        ).hasAuthority("TRAINER")
+                        "/lessons/*").hasAnyAuthority("TRAINER", "ADMIN")
+                .antMatchers(HttpMethod.PATCH,"/lessons/*/student/*").hasAnyAuthority("TRAINER", "STUDENT", "ADMIN")
                 .antMatchers(HttpMethod.GET,
                         "/lessons/student/*",
-                        "/groups/all",
-                        "/coaches/all",
-                        "/swagger/**",
                         "/students/*",
                         "/lessons/*",
                         "/groups/*",
-                        "/coaches/*").hasAnyAuthority("TRAINER", "STUDENT")
+                        "/coaches/*").hasAnyAuthority("TRAINER", "STUDENT", "ADMIN")
                 .antMatchers("/**").hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()

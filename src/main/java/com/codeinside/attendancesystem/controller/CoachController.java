@@ -1,8 +1,8 @@
 package com.codeinside.attendancesystem.controller;
 
-import com.codeinside.attendancesystem.dto.request.RequestCoachDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestCoachPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestCoachDto;
 import com.codeinside.attendancesystem.dto.response.ResponseCoachDto;
-import com.codeinside.attendancesystem.entity.Coach;
 import com.codeinside.attendancesystem.service.CoachService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -102,9 +101,9 @@ public class CoachController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
                     content = @Content) })
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateCoach(@RequestBody RequestCoachDto requestCoachDto,
+    public ResponseEntity<?> updateCoach(@RequestBody @Valid RequestCoachPatchDto requestCoachPatchDto,
                                          @PathVariable (name = "id") Long id) {
-        coachService.updateCoach(requestCoachDto, id);
+        coachService.updateCoach(requestCoachPatchDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

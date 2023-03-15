@@ -1,6 +1,7 @@
 package com.codeinside.attendancesystem.service.impl;
 
-import com.codeinside.attendancesystem.dto.request.RequestCoachDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestCoachPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestCoachDto;
 import com.codeinside.attendancesystem.dto.response.ResponseCoachDto;
 import com.codeinside.attendancesystem.entity.Coach;
 import com.codeinside.attendancesystem.enums.TypeUser;
@@ -59,12 +60,12 @@ public class CoachServiceImpl implements CoachService {
     }
 
     @Override
-    public void updateCoach(RequestCoachDto requestCoachDto, Long id) {
+    public void updateCoach(RequestCoachPatchDto requestCoachPatchDto, Long id) {
         Optional<Coach> coachOptional = coachRepository.findById(id);
         if(coachOptional.isEmpty()) {
             throw new CoachNotFoundException();
         }
-        Coach coach = coachMapper.requestCoachDtoToCoachForPatch(requestCoachDto, coachOptional.get());
+        Coach coach = coachMapper.requestCoachDtoToCoachForPatch(requestCoachPatchDto, coachOptional.get());
         coachRepository.save(coach);
     }
 }

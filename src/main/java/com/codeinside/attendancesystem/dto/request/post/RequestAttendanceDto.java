@@ -1,4 +1,4 @@
-package com.codeinside.attendancesystem.dto.request;
+package com.codeinside.attendancesystem.dto.request.post;
 
 public class RequestAttendanceDto {
 

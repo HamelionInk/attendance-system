@@ -1,6 +1,7 @@
 package com.codeinside.attendancesystem.service.impl;
 
-import com.codeinside.attendancesystem.dto.request.RequestStudentDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestStudentPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestStudentDto;
 import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.entity.Student;
@@ -84,12 +85,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void updateStudent(RequestStudentDto requestStudentDto, Long id) {
+    public void updateStudent(RequestStudentPatchDto requestStudentPatchDto, Long id) {
         Optional<Student> studentOptional = studentRepository.findById(id);
         if(studentOptional.isEmpty()) {
             throw new StudentNotFoundException();
         }
-        Student student = studentMapper.requestStudentDtoToStudentForPatch(requestStudentDto, studentOptional.get());
+        Student student = studentMapper.requestStudentDtoToStudentForPatch(requestStudentPatchDto, studentOptional.get());
         studentRepository.save(student);
     }
 

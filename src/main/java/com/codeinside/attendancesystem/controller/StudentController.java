@@ -1,6 +1,7 @@
 package com.codeinside.attendancesystem.controller;
 
-import com.codeinside.attendancesystem.dto.request.RequestStudentDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestStudentPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestStudentDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -106,9 +107,9 @@ public class StudentController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
                     content = @Content) })
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@RequestBody RequestStudentDto requestStudentDto,
+    public ResponseEntity<?> updateStudent(@RequestBody @Valid RequestStudentPatchDto requestStudentPatchDto,
                               @PathVariable (name = "id") Long id) {
-        studentService.updateStudent(requestStudentDto, id);
+        studentService.updateStudent(requestStudentPatchDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

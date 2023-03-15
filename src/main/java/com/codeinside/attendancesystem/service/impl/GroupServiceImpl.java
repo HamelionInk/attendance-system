@@ -1,12 +1,12 @@
 package com.codeinside.attendancesystem.service.impl;
 
-import com.codeinside.attendancesystem.dto.request.RequestGroupDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestGroupPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestGroupDto;
 import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.entity.Group;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.mapper.GroupMapper;
 import com.codeinside.attendancesystem.repository.GroupRepository;
-import com.codeinside.attendancesystem.repository.StudentRepository;
 import com.codeinside.attendancesystem.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,12 +60,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void updateGroup(RequestGroupDto requestGroupDto, Long id) {
+    public void updateGroup(RequestGroupPatchDto requestGroupPatchDto, Long id) {
         Optional<Group> groupOptional = groupRepository.findById(id);
         if(groupOptional.isEmpty()) {
             throw new GroupNotFoundException();
         }
-        Group group = groupMapper.requestGroupDtoToGroupForPatch(requestGroupDto, groupOptional.get());
+        Group group = groupMapper.requestGroupDtoToGroupForPatch(requestGroupPatchDto, groupOptional.get());
         groupRepository.save(group);
     }
 }

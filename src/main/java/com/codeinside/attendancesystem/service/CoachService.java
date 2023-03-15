@@ -1,6 +1,7 @@
 package com.codeinside.attendancesystem.service;
 
-import com.codeinside.attendancesystem.dto.request.RequestCoachDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestCoachPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestCoachDto;
 import com.codeinside.attendancesystem.dto.response.ResponseCoachDto;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface CoachService {
     List<ResponseCoachDto> getCoaches(Long offset, Long limit);
     void saveCoach(RequestCoachDto requestCoachDto);
     void deleteCoach(Long id);
-    void updateCoach(RequestCoachDto requestCoachDto, Long id);
+    void updateCoach(RequestCoachPatchDto requestCoachPatchDto, Long id);
 
 
 

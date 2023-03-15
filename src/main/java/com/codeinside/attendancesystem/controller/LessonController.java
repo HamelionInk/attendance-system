@@ -1,6 +1,7 @@
 package com.codeinside.attendancesystem.controller;
 
-import com.codeinside.attendancesystem.dto.request.RequestLessonDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestLessonPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
 import com.codeinside.attendancesystem.service.LessonService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -134,8 +135,8 @@ public class LessonController {
                     content = @Content) })
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateLesson(@PathVariable ( name = "id") Long id,
-                                          @RequestBody RequestLessonDto requestLessonDto) {
-        lessonService.updateLesson(requestLessonDto, id);
+                                          @RequestBody @Valid RequestLessonPatchDto requestLessonPatchDto) {
+        lessonService.updateLesson(requestLessonPatchDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

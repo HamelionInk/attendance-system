@@ -1,8 +1,8 @@
-package com.codeinside.attendancesystem.dto.request;
+package com.codeinside.attendancesystem.dto.request.post;
 
 import javax.validation.Valid;
 
-public class RequestAdminDto {
+public class RequestCoachDto {
 
     @Valid
     private RequestPersonDto person;

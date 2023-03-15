@@ -1,12 +1,14 @@
 package com.codeinside.attendancesystem.service.impl;
 
-import com.codeinside.attendancesystem.dto.request.RequestLessonDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestLessonPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.entity.Lesson;
 import com.codeinside.attendancesystem.entity.Group;
 import com.codeinside.attendancesystem.exception.LessonNotFoundException;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
+import com.codeinside.attendancesystem.exception.StudentNotFoundException;
 import com.codeinside.attendancesystem.mapper.LessonMapper;
 import com.codeinside.attendancesystem.repository.LessonRepository;
 import com.codeinside.attendancesystem.repository.GroupRepository;
@@ -100,18 +102,26 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void updateLesson(RequestLessonDto requestLessonDto, Long id) {
+    public void updateLesson(RequestLessonPatchDto requestLessonPatchDto, Long id) {
         Optional<Lesson> lessonOptional = lessonRepository.findById(id);
         if(lessonOptional.isEmpty()) {
             throw new LessonNotFoundException();
         }
-        Lesson lesson = lessonMapper.requestLessonDtoToLessonForPatch(requestLessonDto, lessonOptional.get());
+        Lesson lesson = lessonMapper.requestLessonDtoToLessonForPatch(requestLessonPatchDto, lessonOptional.get());
         lessonRepository.save(lesson);
     }
 
     @Transactional
     @Override
     public void updateAttendanceLessonForStudent(Long lessonId, Long studentId, Boolean attendance) {
+        Optional<Lesson> lessonOptional = lessonRepository.findById(lessonId);
+        if(lessonOptional.isEmpty()) {
+            throw new LessonNotFoundException();
+        }
+        ResponseStudentDto responseStudentDto = studentService.getStudent(studentId);
+        if(responseStudentDto == null) {
+            throw new StudentNotFoundException();
+        }
         lessonRepository.updateAttendanceLessonForStudent(lessonId, studentId, attendance);
     }
 

@@ -1,6 +1,7 @@
 package com.codeinside.attendancesystem.mapper;
 
-import com.codeinside.attendancesystem.dto.request.RequestStudentDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestStudentPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestStudentDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.entity.Student;
 import org.mapstruct.Mapper;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface StudentMapper {
 
     Student requestStudentDtoToStudent(RequestStudentDto requestStudentDto);
-    Student requestStudentDtoToStudentForPatch(RequestStudentDto requestStudentDto, @MappingTarget Student student);
+    Student requestStudentDtoToStudentForPatch(RequestStudentPatchDto requestStudentPatchDto, @MappingTarget Student student);
 
     List<ResponseStudentDto> StudentsToResponseStudentDtos(List<Student> students);
     ResponseStudentDto StudentToResponseStudentDto(Student student);

@@ -1,6 +1,7 @@
 package com.codeinside.attendancesystem.service.impl;
 
-import com.codeinside.attendancesystem.dto.request.RequestAdminDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestAdminPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestAdminDto;
 import com.codeinside.attendancesystem.dto.response.ResponseAdminDto;
 import com.codeinside.attendancesystem.entity.Admin;
 import com.codeinside.attendancesystem.enums.TypeUser;
@@ -52,12 +53,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateAdmin(Long id, RequestAdminDto requestAdminDto) {
+    public void updateAdmin(Long id, RequestAdminPatchDto requestAdminPatchDto) {
         Optional<Admin> adminOptional = adminRepository.findById(id);
         if(adminOptional.isEmpty()) {
             throw new AdminNotFoundException();
         }
-        Admin admin = adminMapper.requestAdminDtoToAdminForPatch(requestAdminDto, adminOptional.get());
+        Admin admin = adminMapper.requestAdminDtoToAdminForPatch(requestAdminPatchDto, adminOptional.get());
         adminRepository.save(admin);
     }
 

@@ -1,6 +1,8 @@
 package com.codeinside.attendancesystem.controller;
 
-import com.codeinside.attendancesystem.dto.request.RequestAdminDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestAdminPatchDto;
+import com.codeinside.attendancesystem.dto.request.patch.RequestPersonPatchDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestAdminDto;
 import com.codeinside.attendancesystem.dto.response.ResponseAdminDto;
 import com.codeinside.attendancesystem.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -92,8 +94,8 @@ public class AdminController {
                     content = @Content)})
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAdmin(@PathVariable (name = "id") Long id,
-                            @RequestBody @Valid RequestAdminDto requestAdminDto) {
-        adminService.updateAdmin(id, requestAdminDto);
+                            @RequestBody @Valid RequestAdminPatchDto requestAdminPatchDto) {
+        adminService.updateAdmin(id, requestAdminPatchDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

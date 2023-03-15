@@ -1,6 +1,6 @@
 package util.validator;
 
-import com.codeinside.attendancesystem.dto.request.RequestPersonDto;
+import com.codeinside.attendancesystem.dto.request.post.RequestPersonDto;
 import util.annotation.PasswordMatches;
 
 import javax.validation.ConstraintValidator;
