@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,8 @@ import java.util.List;
 public class Lesson {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lessons_sequence")
+    @SequenceGenerator(name = "lessons_sequence", sequenceName = "seq_lessons", allocationSize = 1)
     private Long id;
 
     @Column(name = "start_date")

@@ -8,13 +8,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import java.util.List;
 
 @Entity(name = "groups")
 public class Group {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "groups_sequence")
+    @SequenceGenerator(name = "groups_sequence", sequenceName = "seq_groups", allocationSize = 1)
     private Long id;
 
     @Column(name = "group_name")

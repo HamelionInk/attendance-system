@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -20,7 +21,8 @@ import java.util.Collections;
 public class Person implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "persons_sequence")
+    @SequenceGenerator(name = "persons_sequence", sequenceName = "seq_persons", allocationSize = 1)
     private Long id;
 
     @Column(name = "password")
@@ -163,5 +165,17 @@ public class Person implements UserDetails {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Coach getCoach() {
+        return coach;
+    }
+
+    public void setCoach(Coach coach) {
+        this.coach = coach;
     }
 }

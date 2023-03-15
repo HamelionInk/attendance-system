@@ -5,12 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
-@Entity(name = "attendance")
+@Entity(name = "attendances")
 public class Attendance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attendances_sequence")
+    @SequenceGenerator(name = "attendances_sequence", sequenceName = "seq_attendances", allocationSize = 1)
     private Long id;
 
     @Column(name = "student_name")

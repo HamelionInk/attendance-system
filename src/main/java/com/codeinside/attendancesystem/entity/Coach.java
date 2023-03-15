@@ -9,13 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import java.util.List;
 
 @Entity(name = "coaches")
 public class Coach {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "coaches_sequence")
+    @SequenceGenerator(name = "coaches_sequence", sequenceName = "seq_coaches", allocationSize = 1)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
