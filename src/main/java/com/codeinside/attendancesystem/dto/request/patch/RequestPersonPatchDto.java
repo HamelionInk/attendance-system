@@ -1,10 +1,13 @@
 package com.codeinside.attendancesystem.dto.request.patch;
 
+import util.annotation.NumberPhoneAlreadyExist;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
+@NumberPhoneAlreadyExist
 public class RequestPersonPatchDto {
 
     private String password;
@@ -12,7 +15,7 @@ public class RequestPersonPatchDto {
     private String firstName;
     private String lastName;
     private String patronymic;
-    @Pattern(regexp = "^\\+[1-9]{1}[0-9]{3,14}$", message = "{numberPhone.pattern}")
+    @Pattern(regexp = "^[1-9]{1}[0-9]{3,14}$", message = "{numberPhone.pattern}")
     private String numberPhone;
     @Max(value = 110, message = "{age.max}")
     @Min(value = 6, message = "{age.min}")

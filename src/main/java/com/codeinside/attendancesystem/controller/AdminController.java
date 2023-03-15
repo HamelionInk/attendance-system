@@ -1,7 +1,6 @@
 package com.codeinside.attendancesystem.controller;
 
 import com.codeinside.attendancesystem.dto.request.patch.RequestAdminPatchDto;
-import com.codeinside.attendancesystem.dto.request.patch.RequestPersonPatchDto;
 import com.codeinside.attendancesystem.dto.request.post.RequestAdminDto;
 import com.codeinside.attendancesystem.dto.response.ResponseAdminDto;
 import com.codeinside.attendancesystem.service.AdminService;
@@ -39,7 +38,7 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @Operation(summary = "Создать аккаунт администратора сервиса")
+    @Operation(summary = "Создать аккаунт администратора сервиса - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Администратор создан - OK",
                     content = { @Content(mediaType = "application/json",
@@ -52,7 +51,7 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Получить информацию об администраторе по его 'id'")
+    @Operation(summary = "Получить информацию об администраторе по его 'id' - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Администратор найден - OK",
                     content = { @Content(mediaType = "application/json",
@@ -66,7 +65,7 @@ public class AdminController {
     }
 
     @Operation(summary = "Получить список всех администраторов, " +
-            "для пагинации используются необяательные параметры offset и limit")
+            "для пагинации используются необяательные параметры offset и limit - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Список администраторов найден - OK",
                     content = { @Content(mediaType = "application/json",
@@ -83,7 +82,7 @@ public class AdminController {
         return ResponseEntity.ok(responseAdminDtos);
     }
 
-    @Operation(summary = "Обновить информацию об администраторе по его 'id'")
+    @Operation(summary = "Обновить информацию об администраторе по его 'id' - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Администратор обновлен - OK",
                     content = { @Content(mediaType = "application/json",
@@ -99,7 +98,7 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Удалить информацию об администраторе по его 'id'")
+    @Operation(summary = "Удалить информацию об администраторе по его 'id' - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Администратор удален - OK",
                     content = { @Content(mediaType = "application/json",

@@ -11,6 +11,6 @@ public interface GroupService {
     void saveGroup(RequestGroupDto requestGroupDto);
     ResponseGroupDto getGroup(Long groupId);
     List<ResponseGroupDto> getGroups(Long offset, Long limit);
-    void deleteGroup(Long id);
     void updateGroup(RequestGroupPatchDto requestGroupPatchDto, Long id);
+    void deleteGroup(Long id);
 }

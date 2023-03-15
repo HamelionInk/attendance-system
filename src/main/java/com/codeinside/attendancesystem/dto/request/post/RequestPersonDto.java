@@ -24,7 +24,7 @@ public class RequestPersonDto {
     private String lastName;
     private String patronymic;
     @NotBlank(message = "{numberPhone.notBlank}")
-    @Pattern(regexp = "^\\+[1-9]{1}[0-9]{3,14}$", message = "{numberPhone.pattern}")
+    @Pattern(regexp = "^[1-9]{1}[0-9]{3,14}$", message = "{numberPhone.pattern}")
     private String numberPhone;
     @Max(value = 110, message = "{age.max}")
     @Min(value = 6, message = "{age.min}")

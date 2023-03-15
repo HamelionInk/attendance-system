@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface CoachService {
 
+    void saveCoach(RequestCoachDto requestCoachDto);
     ResponseCoachDto getCoach(Long id);
     List<ResponseCoachDto> getCoaches(Long offset, Long limit);
-    void saveCoach(RequestCoachDto requestCoachDto);
-    void deleteCoach(Long id);
     void updateCoach(RequestCoachPatchDto requestCoachPatchDto, Long id);
+    void deleteCoach(Long id);
 
 
 

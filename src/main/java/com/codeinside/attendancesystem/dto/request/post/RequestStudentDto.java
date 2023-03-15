@@ -1,7 +1,5 @@
 package com.codeinside.attendancesystem.dto.request.post;
 
-import com.codeinside.attendancesystem.dto.request.post.RequestPersonDto;
-
 import javax.validation.Valid;
 
 public class RequestStudentDto {

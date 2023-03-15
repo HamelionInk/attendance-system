@@ -67,21 +67,21 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<ResponseStudentDto> getStudents(Long offset, Long limit) {
-        List<Student> students = studentRepository.selectAllWithOffsetAndLimit(offset, limit);
-        if(students.isEmpty()) {
-            throw new StudentNotFoundException();
-        }
-        return studentMapper.StudentsToResponseStudentDtos(students);
-    }
-
-    @Override
     public ResponseStudentDto getStudent(Long id) {
         Optional<Student> studentOptional = studentRepository.findById(id);
         if(studentOptional.isEmpty()) {
             throw new StudentNotFoundException();
         }
         return studentMapper.StudentToResponseStudentDto(studentOptional.get());
+    }
+
+    @Override
+    public List<ResponseStudentDto> getStudents(Long offset, Long limit) {
+        List<Student> students = studentRepository.selectAllWithOffsetAndLimit(offset, limit);
+        if(students.isEmpty()) {
+            throw new StudentNotFoundException();
+        }
+        return studentMapper.StudentsToResponseStudentDtos(students);
     }
 
     @Override
@@ -94,15 +94,6 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(student);
     }
 
-    @Override
-    public void deleteStudent(Long id) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if(studentOptional.isEmpty()) {
-            throw new StudentNotFoundException();
-        }
-        studentRepository.deleteById(id);
-    }
-
     @Transactional
     @Override
     public void excludeStudentForGroup(Long studentId) {
@@ -111,5 +102,14 @@ public class StudentServiceImpl implements StudentService {
             throw new StudentNotFoundException();
         }
         studentRepository.updateGroupIdValueOnNullForStudent(studentId);
+    }
+
+    @Override
+    public void deleteStudent(Long id) {
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if(studentOptional.isEmpty()) {
+            throw new StudentNotFoundException();
+        }
+        studentRepository.deleteById(id);
     }
 }

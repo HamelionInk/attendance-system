@@ -38,7 +38,20 @@ public class CoachController {
         this.coachService = coachService;
     }
 
-    @Operation(summary = "Получить информацию о тренере по его 'id'")
+    @Operation(summary = "Создать аккаунт тренера для школы - Доступы: ADMIN")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Тренер создан - OK",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RequestCoachDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
+                    content = @Content) })
+    @PostMapping
+    public ResponseEntity<?> saveCoach(@RequestBody @Valid RequestCoachDto requestCoachDto) {
+        coachService.saveCoach(requestCoachDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Получить информацию о тренере по его 'id' - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Тренер найден - OK",
                     content = { @Content(mediaType = "application/json",
@@ -51,7 +64,7 @@ public class CoachController {
         return ResponseEntity.ok(responseCoachDto);
     }
 
-    @Operation(summary = "Получить список всех тренеров, для пагинации используются необязательные параметры offset и limit")
+    @Operation(summary = "Получить список всех тренеров, для пагинации используются необязательные параметры offset и limit - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Список тренеров найден - OK",
                     content = { @Content(mediaType = "application/json",
@@ -68,32 +81,7 @@ public class CoachController {
         return ResponseEntity.ok(responseTrainersDto);
     }
 
-    @Operation(summary = "Создать аккаунт тренера для школы")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Тренер создан - OK",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RequestCoachDto.class)) }),
-            @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
-                    content = @Content) })
-    @PostMapping
-    public ResponseEntity<?> saveCoach(@RequestBody @Valid RequestCoachDto requestCoachDto) {
-        coachService.saveCoach(requestCoachDto);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Operation(summary = "Удалить аккаунт тренера из школы по его 'id'")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Тренер удален - OK",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Тренера с таким 'id' не существует - Not Found",
-                    content = @Content) })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCoach(@PathVariable (name = "id") Long id) {
-        coachService.deleteCoach(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Operation(summary = "Обновить информацию о тренере по его 'id'")
+    @Operation(summary = "Обновить информацию о тренере по его 'id' - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Информация обновлена - OK",
                     content = { @Content(mediaType = "application/json",
@@ -104,6 +92,18 @@ public class CoachController {
     public ResponseEntity<?> updateCoach(@RequestBody @Valid RequestCoachPatchDto requestCoachPatchDto,
                                          @PathVariable (name = "id") Long id) {
         coachService.updateCoach(requestCoachPatchDto, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Удалить аккаунт тренера из школы по его 'id' - Доступы: ADMIN")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Тренер удален - OK",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Тренера с таким 'id' не существует - Not Found",
+                    content = @Content) })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCoach(@PathVariable (name = "id") Long id) {
+        coachService.deleteCoach(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

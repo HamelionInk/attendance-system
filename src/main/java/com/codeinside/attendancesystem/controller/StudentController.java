@@ -38,7 +38,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @Operation(summary = "Создать аккаунт студента для школы")
+    @Operation(summary = "Создать аккаунт студента для школы - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Студент создан создано - OK",
                     content = { @Content(mediaType = "application/json",
@@ -51,7 +51,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Добавить студента по его 'id' к группе по ее 'id'")
+    @Operation(summary = "Добавить студента по его 'id' к группе по ее 'id' - Доступы: ADMIN, TRAINER")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Студент добавлен в группу - OK",
                     content = @Content),
@@ -67,7 +67,20 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Получить список всех студентов, для пагинации используются необязательные параметры offset и limit")
+    @Operation(summary = "Получить информацию о студенте по его 'id'- Доступы: ADMIN, TRAINER, STUDENT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Студент найден - OK",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseStudentDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Студента с таким 'id' не найдено - Not Found",
+                    content = @Content) })
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseStudentDto> getStudent(@PathVariable (name = "id") Long id) {
+        ResponseStudentDto responseStudentDto = studentService.getStudent(id);
+        return ResponseEntity.ok(responseStudentDto);
+    }
+
+    @Operation(summary = "Получить список всех студентов, для пагинации используются необязательные параметры offset и limit - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Список студентов найден - OK",
                     content = { @Content(mediaType = "application/json",
@@ -84,20 +97,7 @@ public class StudentController {
         return ResponseEntity.ok(responseStudentsDto);
     }
 
-    @Operation(summary = "Получить информацию о студенте по его 'id'")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Студент найден - OK",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ResponseStudentDto.class)) }),
-            @ApiResponse(responseCode = "404", description = "Студента с таким 'id' не найдено - Not Found",
-                    content = @Content) })
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseStudentDto> getStudent(@PathVariable (name = "id") Long id) {
-        ResponseStudentDto responseStudentDto = studentService.getStudent(id);
-        return ResponseEntity.ok(responseStudentDto);
-    }
-
-    @Operation(summary = "Обновить информацию о студенте по его 'id'")
+    @Operation(summary = "Обновить информацию о студенте по его 'id' - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Студент обновлен - OK",
                     content = { @Content(mediaType = "application/json",
@@ -113,7 +113,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Исключить студента из группы по 'id' студента")
+    @Operation(summary = "Исключить студента из группы по 'id' студента - Доступы: ADMIN, TRAINER")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа удалена - OK",
                     content = @Content),
@@ -125,7 +125,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Удалить студента по его 'id'")
+    @Operation(summary = "Удалить студента по его 'id' - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Студент удален - OK",
                     content = @Content),

@@ -4,14 +4,14 @@ import com.codeinside.attendancesystem.dto.request.patch.RequestLessonPatchDto;
 import com.codeinside.attendancesystem.dto.request.post.RequestLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
-import com.codeinside.attendancesystem.entity.Lesson;
 import com.codeinside.attendancesystem.entity.Group;
-import com.codeinside.attendancesystem.exception.LessonNotFoundException;
+import com.codeinside.attendancesystem.entity.Lesson;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
+import com.codeinside.attendancesystem.exception.LessonNotFoundException;
 import com.codeinside.attendancesystem.exception.StudentNotFoundException;
 import com.codeinside.attendancesystem.mapper.LessonMapper;
-import com.codeinside.attendancesystem.repository.LessonRepository;
 import com.codeinside.attendancesystem.repository.GroupRepository;
+import com.codeinside.attendancesystem.repository.LessonRepository;
 import com.codeinside.attendancesystem.service.AttendanceService;
 import com.codeinside.attendancesystem.service.LessonService;
 import com.codeinside.attendancesystem.service.StudentService;
@@ -92,16 +92,6 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void deleteLesson(Long id) {
-        Optional<Lesson> lessonOptional = lessonRepository.findById(id);
-        if(lessonOptional.isEmpty()) {
-            throw new LessonNotFoundException();
-        }
-
-        lessonRepository.deleteById(id);
-    }
-
-    @Override
     public void updateLesson(RequestLessonPatchDto requestLessonPatchDto, Long id) {
         Optional<Lesson> lessonOptional = lessonRepository.findById(id);
         if(lessonOptional.isEmpty()) {
@@ -123,6 +113,16 @@ public class LessonServiceImpl implements LessonService {
             throw new StudentNotFoundException();
         }
         lessonRepository.updateAttendanceLessonForStudent(lessonId, studentId, attendance);
+    }
+
+    @Override
+    public void deleteLesson(Long id) {
+        Optional<Lesson> lessonOptional = lessonRepository.findById(id);
+        if(lessonOptional.isEmpty()) {
+            throw new LessonNotFoundException();
+        }
+
+        lessonRepository.deleteById(id);
     }
 
     @Transactional

@@ -1,12 +1,12 @@
 package com.codeinside.attendancesystem.exception.handler;
 
 import com.codeinside.attendancesystem.exception.AdminNotFoundException;
+import com.codeinside.attendancesystem.exception.CoachNotFoundException;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.exception.LessonNotFoundException;
 import com.codeinside.attendancesystem.exception.OutOfNumberOfStudentsException;
 import com.codeinside.attendancesystem.exception.OutOfRangeAgeException;
 import com.codeinside.attendancesystem.exception.StudentNotFoundException;
-import com.codeinside.attendancesystem.exception.CoachNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

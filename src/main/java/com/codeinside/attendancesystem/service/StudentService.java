@@ -10,9 +10,9 @@ public interface StudentService {
 
     void saveStudent(RequestStudentDto requestStudentDto);
     void addStudentForGroup(Long studentId, Long groupId);
-    List<ResponseStudentDto> getStudents(Long offset, Long limit);
     ResponseStudentDto getStudent(Long id);
+    List<ResponseStudentDto> getStudents(Long offset, Long limit);
     void updateStudent(RequestStudentPatchDto requestStudentPatchDto, Long id);
-    void deleteStudent(Long id);
     void excludeStudentForGroup(Long studentId);
+    void deleteStudent(Long id);
 }

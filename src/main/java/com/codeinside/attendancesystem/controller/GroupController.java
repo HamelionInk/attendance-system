@@ -40,7 +40,20 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @Operation(summary = "Получить информацию о группе по ее 'id'")
+    @Operation(summary = "Создать группу - Доступы: ADMIN")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа создана - OK",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RequestGroupDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
+                    content = @Content) })
+    @PostMapping()
+    public ResponseEntity<?> saveGroup(@RequestBody @Valid RequestGroupDto requestGroupDto) {
+        groupService.saveGroup(requestGroupDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Получить информацию о группе по ее 'id' - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа найдена - OK",
                     content = { @Content(mediaType = "application/json",
@@ -53,7 +66,7 @@ public class GroupController {
         return ResponseEntity.ok(responseGroupDto);
     }
 
-    @Operation(summary = "Получить информацию о всех группах, для пагинации используются необязательные параметры offset и limit")
+    @Operation(summary = "Получить информацию о всех группах, для пагинации используются необязательные параметры offset и limit - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Список групп найден - OK",
                     content = { @Content(mediaType = "application/json",
@@ -70,7 +83,21 @@ public class GroupController {
         return ResponseEntity.ok(responseGroupDtos);
     }
 
-    @Operation(summary = "Удалить группу по ее 'id'")
+    @Operation(summary = "Обновить информацию о группе по ее 'id' - Доступы: ADMIN")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа обновлена - OK",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RequestGroupDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
+                    content = @Content) })
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateGroup(@RequestBody @Valid RequestGroupPatchDto requestGroupPatchDto,
+                                         @PathVariable (name = "id") Long id) {
+        groupService.updateGroup(requestGroupPatchDto, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Удалить группу по ее 'id' - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа удалена - OK",
                     content = @Content),
@@ -79,34 +106,6 @@ public class GroupController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGroup(@PathVariable (name = "id") Long id) {
         groupService.deleteGroup(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Operation(summary = "Обновить информацию о группе по ее 'id'")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа обновлена - OK",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RequestGroupDto.class)) }),
-            @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
-                    content = @Content) })
-    @PatchMapping("/{id}")
-    // Обновить информацию о группе
-    public ResponseEntity<?> updateGroup(@RequestBody @Valid RequestGroupPatchDto requestGroupPatchDto,
-                                         @PathVariable (name = "id") Long id) {
-        groupService.updateGroup(requestGroupPatchDto, id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Operation(summary = "Создать группу")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Группа создана - OK",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RequestGroupDto.class)) }),
-            @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
-                    content = @Content) })
-    @PostMapping()
-    public ResponseEntity<?> saveGroup(@RequestBody @Valid RequestGroupDto requestGroupDto) {
-        groupService.saveGroup(requestGroupDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

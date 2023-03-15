@@ -51,15 +51,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void deleteGroup(Long id) {
-        Optional<Group> groupOptional = groupRepository.findById(id);
-        if(groupOptional.isEmpty()) {
-            throw new GroupNotFoundException();
-        }
-        groupRepository.deleteById(id);
-    }
-
-    @Override
     public void updateGroup(RequestGroupPatchDto requestGroupPatchDto, Long id) {
         Optional<Group> groupOptional = groupRepository.findById(id);
         if(groupOptional.isEmpty()) {
@@ -67,5 +58,14 @@ public class GroupServiceImpl implements GroupService {
         }
         Group group = groupMapper.requestGroupDtoToGroupForPatch(requestGroupPatchDto, groupOptional.get());
         groupRepository.save(group);
+    }
+
+    @Override
+    public void deleteGroup(Long id) {
+        Optional<Group> groupOptional = groupRepository.findById(id);
+        if(groupOptional.isEmpty()) {
+            throw new GroupNotFoundException();
+        }
+        groupRepository.deleteById(id);
     }
 }

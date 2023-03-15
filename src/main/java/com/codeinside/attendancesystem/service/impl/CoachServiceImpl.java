@@ -28,6 +28,13 @@ public class CoachServiceImpl implements CoachService {
     }
 
     @Override
+    public void saveCoach(RequestCoachDto requestCoachDto) {
+        Coach coach = coachMapper.requestCoachDtoToCoach(requestCoachDto);
+        coach.getPerson().setTypeUser(TypeUser.TRAINER);
+        coachRepository.save(coach);
+    }
+
+    @Override
     public ResponseCoachDto getCoach(Long id) {
         Optional<Coach> coachOptional = coachRepository.findById(id);
         Coach coach = coachOptional.orElseThrow(CoachNotFoundException::new);
@@ -44,9 +51,12 @@ public class CoachServiceImpl implements CoachService {
     }
 
     @Override
-    public void saveCoach(RequestCoachDto requestCoachDto) {
-        Coach coach = coachMapper.requestCoachDtoToCoach(requestCoachDto);
-        coach.getPerson().setTypeUser(TypeUser.TRAINER);
+    public void updateCoach(RequestCoachPatchDto requestCoachPatchDto, Long id) {
+        Optional<Coach> coachOptional = coachRepository.findById(id);
+        if(coachOptional.isEmpty()) {
+            throw new CoachNotFoundException();
+        }
+        Coach coach = coachMapper.requestCoachDtoToCoachForPatch(requestCoachPatchDto, coachOptional.get());
         coachRepository.save(coach);
     }
 
@@ -57,15 +67,5 @@ public class CoachServiceImpl implements CoachService {
             throw new CoachNotFoundException();
         }
         coachRepository.deleteById(id);
-    }
-
-    @Override
-    public void updateCoach(RequestCoachPatchDto requestCoachPatchDto, Long id) {
-        Optional<Coach> coachOptional = coachRepository.findById(id);
-        if(coachOptional.isEmpty()) {
-            throw new CoachNotFoundException();
-        }
-        Coach coach = coachMapper.requestCoachDtoToCoachForPatch(requestCoachPatchDto, coachOptional.get());
-        coachRepository.save(coach);
     }
 }

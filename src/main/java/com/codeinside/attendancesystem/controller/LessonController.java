@@ -38,7 +38,7 @@ public class LessonController {
         this.lessonService = lessonService;
     }
 
-    @Operation(summary = "Создать занятие")
+    @Operation(summary = "Создать занятие - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Занятие создано - OK",
                     content = { @Content(mediaType = "application/json",
@@ -52,7 +52,7 @@ public class LessonController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Получить информацию о занятии по его 'id'")
+    @Operation(summary = "Получить информацию о занятии по его 'id' - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Занятие найдено - OK",
                     content = { @Content(mediaType = "application/json",
@@ -65,20 +65,7 @@ public class LessonController {
         return ResponseEntity.ok(responseLessonDto);
     }
 
-    @Operation(summary = "Получить информацию о занятиях студента по его 'id'")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Занятия найдены - OK",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ResponseLessonDto.class)) }),
-            @ApiResponse(responseCode = "404", description = "Студента с таким 'id' не найдено - Not Found",
-                    content = @Content) })
-    @GetMapping("/student/{studentId}")
-    public ResponseEntity<List<ResponseLessonDto>> getLessonsForStudents(@PathVariable (name = "studentId") Long id) {
-        List<ResponseLessonDto> responseLessonDtoList = lessonService.getLessonsForStudent(id);
-        return ResponseEntity.ok(responseLessonDtoList);
-    }
-
-    @Operation(summary = "Получить список занятий в школе, для пагинации используются необязательные параметры offset и limit")
+    @Operation(summary = "Получить список занятий в школе, для пагинации используются необязательные параметры offset и limit - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Список занятий найден - OK",
                     content = { @Content(mediaType = "application/json",
@@ -95,19 +82,20 @@ public class LessonController {
         return ResponseEntity.ok(responseLessonDtoList);
     }
 
-    @Operation(summary = "Удалить занятие по его 'id'")
+    @Operation(summary = "Получить информацию о занятиях студента по его 'id' - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Занятие удалено - OK",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Занятия с таким 'id' не найдено - Not Found",
+            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Занятия найдены - OK",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseLessonDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Студента с таким 'id' не найдено - Not Found",
                     content = @Content) })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteLesson(@PathVariable (name = "id") Long id) {
-        lessonService.deleteLesson(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<ResponseLessonDto>> getLessonsForStudents(@PathVariable (name = "studentId") Long id) {
+        List<ResponseLessonDto> responseLessonDtoList = lessonService.getLessonsForStudent(id);
+        return ResponseEntity.ok(responseLessonDtoList);
     }
 
-    @Operation(summary = "Обновить присутствие студента по его 'id' и по 'id' занятия")
+    @Operation(summary = "Обновить присутствие студента по его 'id' и по 'id' занятия - Доступы: ADMIN, TRAINER, STUDENT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Присутсвие обновлено - OK",
                     content = @Content),
@@ -124,7 +112,7 @@ public class LessonController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "Обновить информацию о занятии по его 'id'")
+    @Operation(summary = "Обновить информацию о занятии по его 'id' - Доступы: ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Занятие обновлено - OK",
                     content = { @Content(mediaType = "application/json",
@@ -137,6 +125,18 @@ public class LessonController {
     public ResponseEntity<?> updateLesson(@PathVariable ( name = "id") Long id,
                                           @RequestBody @Valid RequestLessonPatchDto requestLessonPatchDto) {
         lessonService.updateLesson(requestLessonPatchDto, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Удалить занятие по его 'id' - Доступы: ADMIN")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное выполнение запроса. Занятие удалено - OK",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Занятия с таким 'id' не найдено - Not Found",
+                    content = @Content) })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteLesson(@PathVariable (name = "id") Long id) {
+        lessonService.deleteLesson(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

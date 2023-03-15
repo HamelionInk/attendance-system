@@ -1,6 +1,5 @@
 package com.codeinside.attendancesystem.repository;
 
-import com.codeinside.attendancesystem.entity.Coach;
 import com.codeinside.attendancesystem.entity.Lesson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

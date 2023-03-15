@@ -12,7 +12,8 @@ public interface LessonService {
     ResponseLessonDto getLesson(Long id);
     List<ResponseLessonDto> getLessons(Long offset, Long limit);
     List<ResponseLessonDto> getLessonsForStudent(Long studentId);
-    void deleteLesson(Long id);
     void updateLesson(RequestLessonPatchDto requestLessonPatchDto, Long id);
     void updateAttendanceLessonForStudent(Long lessonId, Long studentId, Boolean attendance);
+    void deleteLesson(Long id);
+
 }
