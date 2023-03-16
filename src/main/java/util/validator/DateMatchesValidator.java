@@ -1,6 +1,6 @@
 package util.validator;
 
-import com.codeinside.attendancesystem.dto.request.post.RequestLessonDto;
+import com.codeinside.attendancesystem.dto.request.RequestLessonDto;
 import com.codeinside.attendancesystem.entity.Lesson;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.repository.GroupRepository;

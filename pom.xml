@@ -90,7 +90,7 @@
 				<configuration>
 					<user>${flyway.user}</user>
 					<password>${flyway.password}</password>
-					<url>jdbc:postgresql://localhost:5432/attendance-system</url>
+					<url>jdbc:postgresql://localhost:5432/attendance_system</url>
 				</configuration>
 			</plugin>
 			<plugin>

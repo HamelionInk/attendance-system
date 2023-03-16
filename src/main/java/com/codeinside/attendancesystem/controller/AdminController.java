@@ -1,7 +1,6 @@
 package com.codeinside.attendancesystem.controller;
 
-import com.codeinside.attendancesystem.dto.request.patch.RequestAdminPatchDto;
-import com.codeinside.attendancesystem.dto.request.post.RequestAdminDto;
+import com.codeinside.attendancesystem.dto.request.RequestAdminDto;
 import com.codeinside.attendancesystem.dto.response.ResponseAdminDto;
 import com.codeinside.attendancesystem.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,8 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import util.validator.marker.OnCreate;
+import util.validator.marker.OnUpdate;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,7 +43,7 @@ public class AdminController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
                     content = @Content) })
     @PostMapping
-    public ResponseEntity<?> saveAdmin(@RequestBody @Valid RequestAdminDto requestAdminDto) {
+    public ResponseEntity<?> saveAdmin(@RequestBody @Validated(value = OnCreate.class) RequestAdminDto requestAdminDto) {
         adminService.saveAdmin(requestAdminDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -89,8 +90,8 @@ public class AdminController {
                     content = @Content)})
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAdmin(@PathVariable (name = "id") Long id,
-                            @RequestBody @Valid RequestAdminPatchDto requestAdminPatchDto) {
-        adminService.updateAdmin(id, requestAdminPatchDto);
+                            @RequestBody @Validated(OnUpdate.class) RequestAdminDto requestAdminDto) {
+        adminService.updateAdmin(id, requestAdminDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

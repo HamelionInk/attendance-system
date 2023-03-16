@@ -1,7 +1,6 @@
 package com.codeinside.attendancesystem.controller;
 
-import com.codeinside.attendancesystem.dto.request.patch.RequestCoachPatchDto;
-import com.codeinside.attendancesystem.dto.request.post.RequestCoachDto;
+import com.codeinside.attendancesystem.dto.request.RequestCoachDto;
 import com.codeinside.attendancesystem.dto.response.ResponseCoachDto;
 import com.codeinside.attendancesystem.service.CoachService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,8 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import util.validator.marker.OnCreate;
+import util.validator.marker.OnUpdate;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,7 +43,7 @@ public class CoachController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
                     content = @Content) })
     @PostMapping
-    public ResponseEntity<?> saveCoach(@RequestBody @Valid RequestCoachDto requestCoachDto) {
+    public ResponseEntity<?> saveCoach(@RequestBody @Validated(value = OnCreate.class) RequestCoachDto requestCoachDto) {
         coachService.saveCoach(requestCoachDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -85,9 +86,9 @@ public class CoachController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
                     content = @Content) })
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateCoach(@RequestBody @Valid RequestCoachPatchDto requestCoachPatchDto,
+    public ResponseEntity<?> updateCoach(@RequestBody @Validated(value = OnUpdate.class) RequestCoachDto requestCoachDto,
                                          @PathVariable (name = "id") Long id) {
-        coachService.updateCoach(requestCoachPatchDto, id);
+        coachService.updateCoach(requestCoachDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

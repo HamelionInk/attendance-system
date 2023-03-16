@@ -1,7 +1,6 @@
 package com.codeinside.attendancesystem.service.impl;
 
-import com.codeinside.attendancesystem.dto.request.patch.RequestLessonPatchDto;
-import com.codeinside.attendancesystem.dto.request.post.RequestLessonDto;
+import com.codeinside.attendancesystem.dto.request.RequestLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.entity.Group;
@@ -82,12 +81,12 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void updateLesson(RequestLessonPatchDto requestLessonPatchDto, Long id) {
+    public void updateLesson(RequestLessonDto requestLessonDto, Long id) {
         Optional<Lesson> lessonOptional = lessonRepository.findById(id);
         if(lessonOptional.isEmpty()) {
             throw new LessonNotFoundException();
         }
-        Lesson lesson = lessonMapper.requestLessonDtoToLessonForPatch(requestLessonPatchDto, lessonOptional.get());
+        Lesson lesson = lessonMapper.requestLessonDtoToLessonForPatch(requestLessonDto, lessonOptional.get());
         lessonRepository.save(lesson);
     }
 

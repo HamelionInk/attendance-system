@@ -1,6 +1,6 @@
 package util.validator;
 
-import com.codeinside.attendancesystem.dto.request.post.RequestPersonDto;
+import com.codeinside.attendancesystem.dto.request.RequestPersonDto;
 import com.codeinside.attendancesystem.entity.Person;
 import com.codeinside.attendancesystem.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;

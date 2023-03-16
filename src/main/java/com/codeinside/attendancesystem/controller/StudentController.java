@@ -1,7 +1,6 @@
 package com.codeinside.attendancesystem.controller;
 
-import com.codeinside.attendancesystem.dto.request.patch.RequestStudentPatchDto;
-import com.codeinside.attendancesystem.dto.request.post.RequestStudentDto;
+import com.codeinside.attendancesystem.dto.request.RequestStudentDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,8 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import util.validator.marker.OnCreate;
+import util.validator.marker.OnUpdate;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,7 +43,7 @@ public class StudentController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
                     content = @Content) })
     @PostMapping
-    public ResponseEntity<?> saveStudent(@RequestBody @Valid RequestStudentDto requestStudentDto) {
+    public ResponseEntity<?> saveStudent(@RequestBody @Validated(value = OnCreate.class) RequestStudentDto requestStudentDto) {
         studentService.saveStudent(requestStudentDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -103,9 +104,9 @@ public class StudentController {
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
                     content = @Content) })
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@RequestBody @Valid RequestStudentPatchDto requestStudentPatchDto,
+    public ResponseEntity<?> updateStudent(@RequestBody @Validated(value = OnUpdate.class) RequestStudentDto requestStudentDto,
                               @PathVariable (name = "id") Long id) {
-        studentService.updateStudent(requestStudentPatchDto, id);
+        studentService.updateStudent(requestStudentDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

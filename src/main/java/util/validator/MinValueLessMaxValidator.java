@@ -1,6 +1,6 @@
 package util.validator;
 
-import com.codeinside.attendancesystem.dto.request.post.RequestGroupDto;
+import com.codeinside.attendancesystem.dto.request.RequestGroupDto;
 import util.annotation.MinLessMaxAge;
 
 import javax.validation.ConstraintValidator;

@@ -1,9 +1,9 @@
-create sequence seq_admin start 1 increment 1;
+create sequence seq_admin start 2 increment 1;
 create sequence seq_attendances start 1 increment 1;
 create sequence seq_coaches start 1 increment 1;
 create sequence seq_groups start 1 increment 1;
 create sequence seq_lessons start 1 increment 1;
-create sequence seq_persons start 1 increment 1;
+create sequence seq_persons start 2 increment 1;
 create sequence seq_students start 1 increment 1;
 
 create table persons (

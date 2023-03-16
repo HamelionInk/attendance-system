@@ -14,7 +14,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 
     @Modifying
     @Query(
-            value = "SELECT * FROM administration OFFSET :offset LIMIT :limit ",
+            value = "SELECT * FROM administrations OFFSET :offset LIMIT :limit ",
             nativeQuery = true
     )
     List<Admin> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,

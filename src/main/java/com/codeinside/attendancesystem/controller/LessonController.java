@@ -1,7 +1,6 @@
 package com.codeinside.attendancesystem.controller;
 
-import com.codeinside.attendancesystem.dto.request.patch.RequestLessonPatchDto;
-import com.codeinside.attendancesystem.dto.request.post.RequestLessonDto;
+import com.codeinside.attendancesystem.dto.request.RequestLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
 import com.codeinside.attendancesystem.service.LessonService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,8 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import util.validator.marker.OnCreate;
+import util.validator.marker.OnUpdate;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -43,7 +44,7 @@ public class LessonController {
                     " - Bad Request",
                     content = @Content) })
     @PostMapping
-    public ResponseEntity<?> saveLesson(@RequestBody @Valid RequestLessonDto requestLessonDto) {
+    public ResponseEntity<?> saveLesson(@RequestBody @Validated(OnCreate.class) RequestLessonDto requestLessonDto) {
         lessonService.saveLesson(requestLessonDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -119,8 +120,8 @@ public class LessonController {
                     content = @Content) })
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateLesson(@PathVariable ( name = "id") Long id,
-                                          @RequestBody @Valid RequestLessonPatchDto requestLessonPatchDto) {
-        lessonService.updateLesson(requestLessonPatchDto, id);
+                                          @RequestBody @Validated(value = OnUpdate.class) RequestLessonDto requestLessonDto) {
+        lessonService.updateLesson(requestLessonDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

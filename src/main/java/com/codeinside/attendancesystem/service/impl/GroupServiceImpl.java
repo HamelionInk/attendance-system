@@ -1,7 +1,6 @@
 package com.codeinside.attendancesystem.service.impl;
 
-import com.codeinside.attendancesystem.dto.request.patch.RequestGroupPatchDto;
-import com.codeinside.attendancesystem.dto.request.post.RequestGroupDto;
+import com.codeinside.attendancesystem.dto.request.RequestGroupDto;
 import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.entity.Group;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
@@ -46,12 +45,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void updateGroup(RequestGroupPatchDto requestGroupPatchDto, Long id) {
+    public void updateGroup(RequestGroupDto requestGroupDto, Long id) {
         Optional<Group> groupOptional = groupRepository.findById(id);
         if(groupOptional.isEmpty()) {
             throw new GroupNotFoundException();
         }
-        Group group = groupMapper.requestGroupDtoToGroupForPatch(requestGroupPatchDto, groupOptional.get());
+        Group group = groupMapper.requestGroupDtoToGroupForPatch(requestGroupDto, groupOptional.get());
         groupRepository.save(group);
     }
 

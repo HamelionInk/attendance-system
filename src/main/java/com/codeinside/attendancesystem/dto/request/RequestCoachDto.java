@@ -1,11 +1,11 @@
-package com.codeinside.attendancesystem.dto.request.post;
+package com.codeinside.attendancesystem.dto.request;
 
 import lombok.Data;
 
 import javax.validation.Valid;
 
 @Data
-public class RequestAdminDto {
+public class RequestCoachDto {
 
     @Valid
     private RequestPersonDto person;

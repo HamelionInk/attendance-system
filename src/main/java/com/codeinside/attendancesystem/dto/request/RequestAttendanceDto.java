@@ -1,4 +1,4 @@
-package com.codeinside.attendancesystem.dto.request.post;
+package com.codeinside.attendancesystem.dto.request;
 
 import lombok.Data;
 
