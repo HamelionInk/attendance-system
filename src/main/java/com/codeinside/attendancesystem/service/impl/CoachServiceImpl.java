@@ -5,8 +5,10 @@ import com.codeinside.attendancesystem.dto.response.ResponseCoachDto;
 import com.codeinside.attendancesystem.entity.Coach;
 import com.codeinside.attendancesystem.enums.TypeUser;
 import com.codeinside.attendancesystem.exception.CoachNotFoundException;
+import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistException;
 import com.codeinside.attendancesystem.mapper.CoachMapper;
 import com.codeinside.attendancesystem.repository.CoachRepository;
+import com.codeinside.attendancesystem.repository.PersonRepository;
 import com.codeinside.attendancesystem.service.CoachService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,20 @@ public class CoachServiceImpl implements CoachService {
 
     private final CoachMapper coachMapper;
     private final CoachRepository coachRepository;
+    private final PersonRepository personRepository;
 
     @Override
     public void saveCoach(RequestCoachDto requestCoachDto) {
         Coach coach = coachMapper.requestCoachDtoToCoach(requestCoachDto);
         coach.getPerson().setTypeUser(TypeUser.TRAINER);
+        numberPhoneAlreadyExist(coach.getPerson().getNumberPhone());
         coachRepository.save(coach);
+    }
+
+    public void numberPhoneAlreadyExist(String numberPhone) {
+        if(personRepository.findByNumberPhone(numberPhone).getNumberPhone().equals(numberPhone)) {
+            throw new NumberPhoneAlreadyExistException();
+        }
     }
 
     @Override
@@ -51,6 +61,9 @@ public class CoachServiceImpl implements CoachService {
             throw new CoachNotFoundException();
         }
         Coach coach = coachMapper.requestCoachDtoToCoachForPatch(requestCoachDto, coachOptional.get());
+        if(requestCoachDto.getPerson().getNumberPhone() != null) {
+            numberPhoneAlreadyExist(coach.getPerson().getNumberPhone());
+        }
         coachRepository.save(coach);
     }
 

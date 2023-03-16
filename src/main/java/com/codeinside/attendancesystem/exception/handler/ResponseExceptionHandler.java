@@ -4,6 +4,7 @@ import com.codeinside.attendancesystem.exception.AdminNotFoundException;
 import com.codeinside.attendancesystem.exception.CoachNotFoundException;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.exception.LessonNotFoundException;
+import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistException;
 import com.codeinside.attendancesystem.exception.OutOfNumberOfStudentsException;
 import com.codeinside.attendancesystem.exception.OutOfRangeAgeException;
 import com.codeinside.attendancesystem.exception.StudentNotFoundException;
@@ -75,5 +76,11 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleAdminNotFoundException(final RuntimeException ex, final WebRequest request) {
         final GenericResponseExceptionHandler bodyOfResponse = new GenericResponseExceptionHandler("This Admin not found", "AdminNotFound");
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({ NumberPhoneAlreadyExistException.class })
+    public ResponseEntity<?> handleNumberPhoneAlreadyExistException(final RuntimeException ex, final WebRequest request) {
+        final GenericResponseExceptionHandler bodyOfResponse = new GenericResponseExceptionHandler("Number phone already exist", "NumberPhoneAlreadyExist");
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 }

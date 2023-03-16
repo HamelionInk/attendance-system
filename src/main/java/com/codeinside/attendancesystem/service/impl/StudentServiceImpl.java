@@ -5,10 +5,12 @@ import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.entity.Student;
 import com.codeinside.attendancesystem.enums.TypeUser;
+import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistException;
 import com.codeinside.attendancesystem.exception.OutOfNumberOfStudentsException;
 import com.codeinside.attendancesystem.exception.OutOfRangeAgeException;
 import com.codeinside.attendancesystem.exception.StudentNotFoundException;
 import com.codeinside.attendancesystem.mapper.StudentMapper;
+import com.codeinside.attendancesystem.repository.PersonRepository;
 import com.codeinside.attendancesystem.repository.StudentRepository;
 import com.codeinside.attendancesystem.service.GroupService;
 import com.codeinside.attendancesystem.service.StudentService;
@@ -25,13 +27,21 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentMapper studentMapper;
     private final StudentRepository studentRepository;
+    private final PersonRepository personRepository;
     private final GroupService groupService;
 
     @Override
     public void saveStudent(RequestStudentDto requestStudentDto) {
         Student student = studentMapper.requestStudentDtoToStudent(requestStudentDto);
         student.getPerson().setTypeUser(TypeUser.STUDENT);
+        numberPhoneAlreadyExist(student.getPerson().getNumberPhone());
         studentRepository.save(student);
+    }
+
+    public void numberPhoneAlreadyExist(String numberPhone) {
+        if(personRepository.findByNumberPhone(numberPhone).getNumberPhone().equals(numberPhone)) {
+            throw new NumberPhoneAlreadyExistException();
+        }
     }
 
     @Transactional
@@ -84,6 +94,9 @@ public class StudentServiceImpl implements StudentService {
             throw new StudentNotFoundException();
         }
         Student student = studentMapper.requestStudentDtoToStudentForPatch(requestStudentDto, studentOptional.get());
+        if(requestStudentDto.getPerson().getNumberPhone() != null) {
+            numberPhoneAlreadyExist(student.getPerson().getNumberPhone());
+        }
         studentRepository.save(student);
     }
 

@@ -1,4 +1,4 @@
-package com.codeinside.attendancesystem;
+package com.codeinside.attendancesystem.unit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

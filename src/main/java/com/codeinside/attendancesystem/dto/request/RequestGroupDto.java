@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@MinLessMaxAge
+@MinLessMaxAge(groups = { OnCreate.class, OnUpdate.class })
 @Data
 public class RequestGroupDto {
 

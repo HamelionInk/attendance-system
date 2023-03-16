@@ -1,7 +1,6 @@
 package com.codeinside.attendancesystem.dto.request;
 
 import lombok.Data;
-import util.annotation.NumberPhoneAlreadyExist;
 import util.annotation.PasswordMatches;
 import util.validator.marker.OnCreate;
 import util.validator.marker.OnUpdate;
@@ -13,8 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@PasswordMatches
-@NumberPhoneAlreadyExist
+@PasswordMatches(groups = OnCreate.class)
 @Data
 public class RequestPersonDto {
 

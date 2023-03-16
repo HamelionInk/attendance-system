@@ -41,7 +41,9 @@ public class StudentController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RequestStudentDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
-                    content = @Content) })
+                    content = @Content),
+            @ApiResponse(responseCode = "409", description = "Пользователь с таким номером телефона уже существует - CONFLICT",
+                    content = @Content)})
     @PostMapping
     public ResponseEntity<?> saveStudent(@RequestBody @Validated(value = OnCreate.class) RequestStudentDto requestStudentDto) {
         studentService.saveStudent(requestStudentDto);

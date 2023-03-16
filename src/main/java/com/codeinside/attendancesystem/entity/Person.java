@@ -135,11 +135,11 @@ public class Person implements UserDetails {
         this.numberPhone = numberPhone;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -165,10 +165,6 @@ public class Person implements UserDetails {
 
     public void setStudent(Student student) {
         this.student = student;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
     }
 
     public Coach getCoach() {

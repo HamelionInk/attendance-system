@@ -41,6 +41,8 @@ public class AdminController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RequestAdminDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при создании - Bad Request",
+                    content = @Content),
+            @ApiResponse(responseCode = "409", description = "Пользователь с таким номером телефона уже существует - CONFLICT",
                     content = @Content) })
     @PostMapping
     public ResponseEntity<?> saveAdmin(@RequestBody @Validated(value = OnCreate.class) RequestAdminDto requestAdminDto) {

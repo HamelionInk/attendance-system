@@ -5,8 +5,10 @@ import com.codeinside.attendancesystem.dto.response.ResponseAdminDto;
 import com.codeinside.attendancesystem.entity.Admin;
 import com.codeinside.attendancesystem.enums.TypeUser;
 import com.codeinside.attendancesystem.exception.AdminNotFoundException;
+import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistException;
 import com.codeinside.attendancesystem.mapper.AdminMapper;
 import com.codeinside.attendancesystem.repository.AdminRepository;
+import com.codeinside.attendancesystem.repository.PersonRepository;
 import com.codeinside.attendancesystem.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,12 +22,20 @@ public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
     private final AdminMapper adminMapper;
+    private final PersonRepository personRepository;
 
     @Override
     public void saveAdmin(RequestAdminDto requestAdminDto) {
         Admin admin = adminMapper.requestAdminDtoToAdmin(requestAdminDto);
         admin.getPerson().setTypeUser(TypeUser.ADMIN);
+        numberPhoneAlreadyExist(admin.getPerson().getNumberPhone());
         adminRepository.save(admin);
+    }
+
+    public void numberPhoneAlreadyExist(String numberPhone) {
+        if(personRepository.findByNumberPhone(numberPhone).getNumberPhone().equals(numberPhone)) {
+            throw new NumberPhoneAlreadyExistException();
+        }
     }
 
     @Override
@@ -53,6 +63,9 @@ public class AdminServiceImpl implements AdminService {
             throw new AdminNotFoundException();
         }
         Admin admin = adminMapper.requestAdminDtoToAdminForPatch(requestAdminDto, adminOptional.get());
+        if(requestAdminDto.getPerson().getNumberPhone() != null) {
+            numberPhoneAlreadyExist(admin.getPerson().getNumberPhone());
+        }
         adminRepository.save(admin);
     }
 
