@@ -26,6 +26,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -95,53 +98,103 @@ public class CoachControllerTest {
     }
 
     @Test
-    public void getMappingGetCoachStatusIsOk() {
-
+    public void getMappingGetCoachStatusIsOk() throws Exception {
+        mockMvc.perform(
+                        get("/coaches/{id}", 1)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(coachService, times(1)).getCoach(any());
     }
 
     @Test
-    public void getMappingGetCoachStatusNotFound() {
-
+    public void getMappingGetCoachStatusNotFound() throws Exception {
+        doThrow(CoachNotFoundException.class).when(coachService).getCoach(any());
+        mockMvc.perform(
+                        get("/coaches/{id}", 1)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+        verify(coachService, times(1)).getCoach(any());
     }
 
     @Test
-    public void getMappingGetCoachesStatusIsOk() {
-
+    public void getMappingGetCoachesStatusIsOk() throws Exception {
+        mockMvc.perform(
+                        get("/coaches/all")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(coachService, times(1)).getCoaches(any(), any());
     }
 
     @Test
-    public void getMappingGetCoachesStatusNotFound() {
-
+    public void getMappingGetCoachesStatusNotFound() throws Exception {
+        doThrow(CoachNotFoundException.class).when(coachService).getCoaches(any(), any());
+        mockMvc.perform(
+                        get("/coaches/all")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+        verify(coachService, times(1)).getCoaches(any(), any());
     }
 
     @Test
-    public void patchMappingUpdateCoachStatusIsOk() {
-
+    public void patchMappingUpdateCoachStatusIsOk() throws Exception {
+        mockMvc.perform(
+                        patch("/coaches/{id}", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(requestCoachDto)))
+                .andExpect(status().isOk());
+        verify(coachService, times(1)).updateCoach(any(), any());
     }
 
     @Test
-    public void patchMappingUpdateCoachStatusNotFound() {
-
+    public void patchMappingUpdateCoachStatusNotFound() throws Exception {
+        doThrow(CoachNotFoundException.class).when(coachService).updateCoach(any(), any());
+        mockMvc.perform(
+                        patch("/coaches/{id}", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(requestCoachDto)))
+                .andExpect(status().isNotFound());
+        verify(coachService, times(1)).updateCoach(any(), any());
     }
 
     @Test
-    public void patchMappingUpdateCoachStatusBadRequest() {
-
+    public void patchMappingUpdateCoachStatusBadRequest() throws Exception {
+        requestCoachDto.getPerson().setEmail("emailfe");
+        mockMvc.perform(
+                        patch("/coaches/{id}", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(requestCoachDto)))
+                .andExpect(status().isBadRequest());
+        verify(coachService, times(0)).updateCoach(any(), any());
     }
 
     @Test
-    public void patchMappingUpdateCoachStatusConflict() {
-
+    public void patchMappingUpdateCoachStatusConflict() throws Exception {
+        doThrow(NumberPhoneAlreadyExistException.class).when(coachService).updateCoach(any(), any());
+        mockMvc.perform(
+                        patch("/coaches/{id}", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(requestCoachDto)))
+                .andExpect(status().isConflict());
+        verify(coachService, times(1)).updateCoach(any(), any());
     }
 
     @Test
-    public void deleteMappingDeleteCoachStatusIsOk() {
-
+    public void deleteMappingDeleteCoachStatusIsOk() throws Exception {
+        mockMvc.perform(
+                        delete("/coaches/{id}", 1)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(coachService, times(1)).deleteCoach(any());
     }
 
     @Test
-    public void deleteMappingDeleteCoachStatusNotFound() {
-
+    public void deleteMappingDeleteCoachStatusNotFound() throws Exception {
+        doThrow(CoachNotFoundException.class).when(coachService).deleteCoach(any());
+        mockMvc.perform(
+                        delete("/coaches/{id}", 1)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+        verify(coachService, times(1)).deleteCoach(any());
     }
 
     public static String asJsonString(final Object obj) {

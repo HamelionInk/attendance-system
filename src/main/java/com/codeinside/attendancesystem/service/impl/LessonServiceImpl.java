@@ -5,6 +5,7 @@ import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.entity.Group;
 import com.codeinside.attendancesystem.entity.Lesson;
+import com.codeinside.attendancesystem.exception.DateMatchesException;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.exception.LessonNotFoundException;
 import com.codeinside.attendancesystem.exception.StudentNotFoundException;
@@ -50,8 +51,34 @@ public class LessonServiceImpl implements LessonService {
         calendar.add(Calendar.HOUR, 1);
         lesson.setEndDate(calendar.getTime());
 
+        dateMatches(requestLessonDto);
         lessonRepository.save(lesson);
         attendanceService.initializationAttendanceEntity(group.getStudents(), lesson.getId());
+    }
+
+    public void dateMatches(RequestLessonDto requestLessonDto) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        List<Lesson> lessons = groupRepository
+                .findById(requestLessonDto.getGroupId())
+                .orElseThrow(GroupNotFoundException::new)
+                .getLessons();
+
+        if(lessons.isEmpty()) {
+            return;
+        }
+
+        if(requestLessonDto.getStartDate() == null) {
+            return;
+        }
+
+        for(Lesson lesson : lessons) {
+            String currentDate = simpleDateFormat.format(requestLessonDto.getStartDate());
+            String lessonDate = simpleDateFormat.format(lesson.getStartDate());
+            if(!lessonDate.equals(currentDate)) {
+                throw new DateMatchesException();
+            }
+        }
     }
 
     @Override
@@ -86,6 +113,7 @@ public class LessonServiceImpl implements LessonService {
         if(lessonOptional.isEmpty()) {
             throw new LessonNotFoundException();
         }
+        dateMatches(requestLessonDto);
         Lesson lesson = lessonMapper.requestLessonDtoToLessonForPatch(requestLessonDto, lessonOptional.get());
         lessonRepository.save(lesson);
     }

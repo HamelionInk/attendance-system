@@ -84,7 +84,9 @@ public class GroupController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RequestGroupDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Ошибка в запросе при обновлении - Bad Request",
-                    content = @Content) })
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Группы с таким 'id' не существует - Not Found",
+                    content = @Content)})
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateGroup(@RequestBody @Validated(value = OnUpdate.class) RequestGroupDto requestGroupDto,
                                          @PathVariable (name = "id") Long id) {

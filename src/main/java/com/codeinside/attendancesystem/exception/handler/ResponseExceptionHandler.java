@@ -2,6 +2,7 @@ package com.codeinside.attendancesystem.exception.handler;
 
 import com.codeinside.attendancesystem.exception.AdminNotFoundException;
 import com.codeinside.attendancesystem.exception.CoachNotFoundException;
+import com.codeinside.attendancesystem.exception.DateMatchesException;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.exception.LessonNotFoundException;
 import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistException;
@@ -81,6 +82,12 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ NumberPhoneAlreadyExistException.class })
     public ResponseEntity<?> handleNumberPhoneAlreadyExistException(final RuntimeException ex, final WebRequest request) {
         final GenericResponseExceptionHandler bodyOfResponse = new GenericResponseExceptionHandler("Number phone already exist", "NumberPhoneAlreadyExist");
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler({DateMatchesException.class })
+    public ResponseEntity<?> handleDateMatchesException(final RuntimeException ex, final WebRequest request) {
+        final GenericResponseExceptionHandler bodyOfResponse = new GenericResponseExceptionHandler("Date matches", "DateMatches");
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 }

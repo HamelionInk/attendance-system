@@ -2,7 +2,6 @@ package com.codeinside.attendancesystem.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import util.annotation.DateMatches;
 import util.validator.marker.OnCreate;
 import util.validator.marker.OnUpdate;
 
@@ -11,7 +10,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@DateMatches(groups = { OnCreate.class, OnUpdate.class })
 @Data
 public class RequestLessonDto {
 
