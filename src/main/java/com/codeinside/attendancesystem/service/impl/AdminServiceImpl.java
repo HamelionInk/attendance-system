@@ -33,7 +33,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     public void numberPhoneAlreadyExist(String numberPhone) {
-        if(personRepository.findByNumberPhone(numberPhone).getNumberPhone().equals(numberPhone)) {
+        if(personRepository.findByNumberPhone(numberPhone) != null) {
             throw new NumberPhoneAlreadyExistException();
         }
     }
