@@ -37,12 +37,9 @@ public class LessonControllerTest {
 
     @Mock
     private LessonService lessonService;
-
     @InjectMocks
     private LessonController lessonController;
-
     private MockMvc mockMvc;
-
     private RequestLessonDto requestLessonDto;
 
     @BeforeEach

@@ -37,12 +37,9 @@ public class CoachControllerTest {
 
     @Mock
     private CoachService coachService;
-
     @InjectMocks
     private CoachController coachController;
-
     private MockMvc mockMvc;
-
     private RequestCoachDto requestCoachDto;
 
     @BeforeEach
