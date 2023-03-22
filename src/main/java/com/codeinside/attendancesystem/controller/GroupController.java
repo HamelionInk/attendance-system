@@ -71,7 +71,7 @@ public class GroupController {
     @Parameters(value = {
             @Parameter(name = "offset", description = "Сколько строк нужно пропустить"),
             @Parameter(name = "limit", description = "Ограничение на количество получаемых данных после offset") })
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<ResponseGroupDto>> getGroups(@RequestParam (name = "offset", required = false) Long offset,
                                                             @RequestParam (name = "limit", required = false) Long limit) {
         List<ResponseGroupDto> responseGroupDtos = groupService.getGroups(offset, limit);
