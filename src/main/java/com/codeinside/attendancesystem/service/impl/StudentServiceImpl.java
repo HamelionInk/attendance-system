@@ -39,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public void numberPhoneAlreadyExist(String numberPhone) {
-        if(personRepository.findByNumberPhone(numberPhone).getNumberPhone().equals(numberPhone)) {
+        if(personRepository.findByNumberPhone(numberPhone) != null) {
             throw new NumberPhoneAlreadyExistException();
         }
     }
@@ -75,7 +75,7 @@ public class StudentServiceImpl implements StudentService {
         if(studentOptional.isEmpty()) {
             throw new StudentNotFoundException();
         }
-        return studentMapper.StudentToResponseStudentDto(studentOptional.get());
+        return studentMapper.studentToResponseStudentDto(studentOptional.get());
     }
 
     @Override
@@ -84,7 +84,7 @@ public class StudentServiceImpl implements StudentService {
         if(students.isEmpty()) {
             throw new StudentNotFoundException();
         }
-        return studentMapper.StudentsToResponseStudentDtos(students);
+        return studentMapper.studentsToResponseStudentDtos(students);
     }
 
     @Override

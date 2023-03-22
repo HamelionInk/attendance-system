@@ -87,7 +87,7 @@ public class LessonServiceImpl implements LessonService {
         if(lessonOptional.isEmpty()) {
             throw new LessonNotFoundException();
         }
-        return lessonMapper.LessonToResponseLessonDto(lessonOptional.get());
+        return lessonMapper.lessonToResponseLessonDto(lessonOptional.get());
     }
 
     @Override

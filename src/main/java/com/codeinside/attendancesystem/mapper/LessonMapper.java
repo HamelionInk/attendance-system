@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface LessonMapper {
 
-    ResponseLessonDto LessonToResponseLessonDto(Lesson lesson);
+    ResponseLessonDto lessonToResponseLessonDto(Lesson lesson);
     Lesson requestLessonDtoToLesson(RequestLessonDto requestLessonDto);
     Lesson requestLessonDtoToLessonForPatch(RequestLessonDto requestLessonDto, @MappingTarget Lesson lesson);
     List<ResponseLessonDto> lessonsToResponseLessonDtos(List<Lesson> lessonList);
