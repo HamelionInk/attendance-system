@@ -75,7 +75,7 @@ public class LessonServiceImpl implements LessonService {
         for(Lesson lesson : lessons) {
             String currentDate = simpleDateFormat.format(requestLessonDto.getStartDate());
             String lessonDate = simpleDateFormat.format(lesson.getStartDate());
-            if(!lessonDate.equals(currentDate)) {
+            if(lessonDate.equals(currentDate)) {
                 throw new DateMatchesException();
             }
         }
