@@ -3,6 +3,7 @@ package com.codeinside.attendancesystem.service.impl;
 import com.codeinside.attendancesystem.dto.request.RequestStudentDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.entity.Group;
+import com.codeinside.attendancesystem.entity.Lesson;
 import com.codeinside.attendancesystem.entity.Student;
 import com.codeinside.attendancesystem.enums.TypeUser;
 import com.codeinside.attendancesystem.exception.GroupNotFoundException;
@@ -14,11 +15,13 @@ import com.codeinside.attendancesystem.mapper.StudentMapper;
 import com.codeinside.attendancesystem.repository.GroupRepository;
 import com.codeinside.attendancesystem.repository.PersonRepository;
 import com.codeinside.attendancesystem.repository.StudentRepository;
+import com.codeinside.attendancesystem.service.AttendanceService;
 import com.codeinside.attendancesystem.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -29,6 +32,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final PersonRepository personRepository;
     private final GroupRepository groupRepository;
+    private final AttendanceService attendanceService;
 
     @Override
     public void saveStudent(RequestStudentDto requestStudentDto) {
@@ -60,6 +64,13 @@ public class StudentServiceImpl implements StudentService {
 
         if(!checkOutOfNumberOfStudents(group.getStudents().size(), group.getNumberOfStudents())) {
             throw new OutOfNumberOfStudentsException();
+        }
+
+        List<Lesson> lessons = group.getLessons();
+
+        if(!lessons.isEmpty()) {
+            lessons.forEach(data -> attendanceService.initializationAttendanceEntity(Collections.singletonList(student), data.getId()));
+
         }
 
         studentRepository.updateGroupIdForStudent(groupId, studentId);

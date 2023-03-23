@@ -25,7 +25,7 @@ public class Attendance {
     private Long lessonId;
 
     @Column(name = "student_id")
-    private Long student_id;
+    private Long studentId;
 
     public Long getId() {
         return id;
@@ -59,11 +59,11 @@ public class Attendance {
         this.lessonId = lessonId;
     }
 
-    public Long getStudent_id() {
-        return student_id;
+    public Long getStudentId() {
+        return studentId;
     }
 
-    public void setStudent_id(Long student_id) {
-        this.student_id = student_id;
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

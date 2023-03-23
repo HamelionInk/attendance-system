@@ -25,7 +25,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         List<Attendance> attendances = new ArrayList<>();
         students.forEach(data -> {
             Attendance attendance = new Attendance();
-            attendance.setStudent_id(data.getId());
+            attendance.setStudentId(data.getId());
             attendance.setStudentName(data.getPerson().getFirstName() + " " + data.getPerson().getLastName());
             attendance.setLessonId(lessonId);
             attendances.add(attendance);

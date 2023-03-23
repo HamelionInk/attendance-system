@@ -14,6 +14,7 @@ import com.codeinside.attendancesystem.mapper.StudentMapper;
 import com.codeinside.attendancesystem.repository.GroupRepository;
 import com.codeinside.attendancesystem.repository.PersonRepository;
 import com.codeinside.attendancesystem.repository.StudentRepository;
+import com.codeinside.attendancesystem.service.impl.AttendanceServiceImpl;
 import com.codeinside.attendancesystem.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -44,6 +45,8 @@ public class StudentServiceTest {
     private GroupRepository groupRepository;
     @Mock
     private PersonRepository personRepository;
+    @Mock
+    private AttendanceServiceImpl attendanceService;
     @InjectMocks
     private StudentServiceImpl studentService;
     private Student student;
@@ -90,6 +93,7 @@ public class StudentServiceTest {
         group.setNumberOfStudents(34);
         group.setMaxAge(50);
         group.setMinAge(10);
+        group.setLessons(new ArrayList<>());
         when(groupRepository.findById(any())).thenReturn(Optional.of(group));
         List<Student> students = new ArrayList<>();
         group.setStudents(students);
