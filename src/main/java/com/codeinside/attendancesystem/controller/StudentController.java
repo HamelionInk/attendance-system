@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import util.validator.marker.OnCreate;
-import util.validator.marker.OnUpdate;
+import com.codeinside.attendancesystem.util.validator.marker.OnCreate;
+import com.codeinside.attendancesystem.util.validator.marker.OnUpdate;
 
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseStudentDto> getStudent(@PathVariable (name = "id") Long id) {
         ResponseStudentDto responseStudentDto = studentService.getStudent(id);
-        return ResponseEntity.ok(responseStudentDto);
+        return new ResponseEntity<>(responseStudentDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список всех студентов, для пагинации используются необязательные параметры offset и limit - Доступы: ADMIN, TRAINER, STUDENT")
@@ -93,7 +93,7 @@ public class StudentController {
     public ResponseEntity<List<ResponseStudentDto>> getStudents(@RequestParam(name = "offset", required = false) Long offset,
                                                                 @RequestParam (name = "limit", required = false) Long limit) {
         List<ResponseStudentDto> responseStudentsDto = studentService.getStudents(offset, limit);
-        return ResponseEntity.ok(responseStudentsDto);
+        return new ResponseEntity<>(responseStudentsDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Обновить информацию о студенте по его 'id' - Доступы: ADMIN")

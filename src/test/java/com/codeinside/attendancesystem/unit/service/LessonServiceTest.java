@@ -1,20 +1,16 @@
 package com.codeinside.attendancesystem.unit.service;
 
 import com.codeinside.attendancesystem.dto.request.RequestLessonDto;
-import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.dto.response.ResponseLessonDto;
-import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
 import com.codeinside.attendancesystem.entity.Group;
 import com.codeinside.attendancesystem.entity.Lesson;
 import com.codeinside.attendancesystem.entity.Student;
 import com.codeinside.attendancesystem.exception.LessonNotFoundException;
 import com.codeinside.attendancesystem.mapper.LessonMapper;
-import com.codeinside.attendancesystem.repository.AttendanceRepository;
 import com.codeinside.attendancesystem.repository.GroupRepository;
 import com.codeinside.attendancesystem.repository.LessonRepository;
 import com.codeinside.attendancesystem.repository.StudentRepository;
-import com.codeinside.attendancesystem.service.AttendanceService;
-import com.codeinside.attendancesystem.service.StudentService;
+import com.codeinside.attendancesystem.service.impl.AttendanceServiceImpl;
 import com.codeinside.attendancesystem.service.impl.LessonServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -26,15 +22,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,9 +41,9 @@ public class LessonServiceTest {
     @Mock
     private GroupRepository groupRepository;
     @Mock
-    private StudentService studentService;
+    private StudentRepository studentRepository;
     @Mock
-    private AttendanceService attendanceService;
+    private AttendanceServiceImpl attendanceService;
     @InjectMocks
     private LessonServiceImpl lessonService;
     private Group group;
@@ -118,7 +110,7 @@ public class LessonServiceTest {
     public void getLessons() {
         List<Lesson> lessons = new ArrayList<>();
         lessons.add(lesson);
-        when(lessonRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(lessons);
+        when(lessonRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.of(lessons));
         ResponseLessonDto responseLessonDto = new ResponseLessonDto();
         responseLessonDto.setLessonName(lesson.getLessonName());
         List<ResponseLessonDto> responseLessonDtos = new ArrayList<>();
@@ -132,19 +124,19 @@ public class LessonServiceTest {
 
     @Test
     public void getLessonsExpectedException() {
-        when(lessonRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(new ArrayList<>());
+        when(lessonRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(LessonNotFoundException.class, () -> lessonService.getLessons(any(), any()));
     }
 
     @Test
     public void getLessonForStudent() {
-        ResponseStudentDto student = new ResponseStudentDto();
+        Student student = new Student();
         student.setGroupId(5L);
-        when(studentService.getStudent(any())).thenReturn(student);
+        when(studentRepository.findById(any())).thenReturn(Optional.of(student));
         List<Lesson> lessons = new ArrayList<>();
         lessons.add(lesson);
-        when(lessonRepository.selectClassesByGroupId(any())).thenReturn(lessons);
+        when(lessonRepository.selectLessonsByGroupId(any())).thenReturn(Optional.of(lessons));
         ResponseLessonDto responseLessonDto = new ResponseLessonDto();
         responseLessonDto.setLessonName(lesson.getLessonName());
         List<ResponseLessonDto> responseLessonDtos = new ArrayList<>();
@@ -180,10 +172,10 @@ public class LessonServiceTest {
     @Test
     public void updateAttendanceLessonForStudent() {
         when(lessonRepository.findById(any())).thenReturn(Optional.ofNullable(lesson));
-        ResponseStudentDto student = new ResponseStudentDto();
+        Student student = new Student();
         student.setId(1L);
         student.setGroupId(5L);
-        when(studentService.getStudent(any())).thenReturn(student);
+        when(studentRepository.findById(any())).thenReturn(Optional.of(student));
 
         lessonService.updateAttendanceLessonForStudent(2L, 1L, true);
 

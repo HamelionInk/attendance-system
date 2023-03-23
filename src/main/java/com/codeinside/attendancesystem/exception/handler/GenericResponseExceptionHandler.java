@@ -34,10 +34,9 @@ public class GenericResponseExceptionHandler {
 
     public GenericResponseExceptionHandler(List<ObjectError> allErrors, String error) {
         this.error = error;
-        String temp = allErrors.stream()
+        this.message = allErrors.stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining(","));
-        this.message = temp;
     }
 
     public String getMessage() {

@@ -2,18 +2,18 @@ package com.codeinside.attendancesystem.unit.service;
 
 import com.codeinside.attendancesystem.dto.request.RequestPersonDto;
 import com.codeinside.attendancesystem.dto.request.RequestStudentDto;
-import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.dto.response.ResponsePersonDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
+import com.codeinside.attendancesystem.entity.Group;
 import com.codeinside.attendancesystem.entity.Person;
 import com.codeinside.attendancesystem.entity.Student;
 import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistException;
 import com.codeinside.attendancesystem.exception.OutOfRangeAgeException;
 import com.codeinside.attendancesystem.exception.StudentNotFoundException;
 import com.codeinside.attendancesystem.mapper.StudentMapper;
+import com.codeinside.attendancesystem.repository.GroupRepository;
 import com.codeinside.attendancesystem.repository.PersonRepository;
 import com.codeinside.attendancesystem.repository.StudentRepository;
-import com.codeinside.attendancesystem.service.GroupService;
 import com.codeinside.attendancesystem.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -41,7 +41,7 @@ public class StudentServiceTest {
     @Mock
     private StudentMapper studentMapper;
     @Mock
-    private GroupService groupService;
+    private GroupRepository groupRepository;
     @Mock
     private PersonRepository personRepository;
     @InjectMocks
@@ -75,7 +75,7 @@ public class StudentServiceTest {
     @Test
     public void saveStudentExpectedException() {
         when(studentMapper.requestStudentDtoToStudent(any())).thenReturn(student);
-        when(personRepository.findByNumberPhone(any())).thenReturn(new Person());
+        when(personRepository.findByNumberPhone(any())).thenReturn(Optional.of(new Person()));
 
         Assertions.assertThrows(NumberPhoneAlreadyExistException.class, () -> studentService.saveStudent(any()));
 
@@ -85,21 +85,15 @@ public class StudentServiceTest {
 
     @Test
     public void addStudentForGroup() {
-        ResponseGroupDto responseGroupDto = new ResponseGroupDto();
-        responseGroupDto.setGroupName("TestName");
-        responseGroupDto.setNumberOfStudents(34);
-        responseGroupDto.setMaxAge(20);
-        responseGroupDto.setMinAge(10);
-        when(groupService.getGroup(any())).thenReturn(responseGroupDto);
-        ResponseStudentDto responseStudentDto = new ResponseStudentDto();
-        ResponsePersonDto responsePersonDto = new ResponsePersonDto();
-        responsePersonDto.setAge(15);
-        responseStudentDto.setGroupId(12L);
-        responseStudentDto.setPerson(responsePersonDto);
-        List<ResponseStudentDto> responseStudentDtos = new ArrayList<>();
-        responseGroupDto.setStudents(responseStudentDtos);
+        Group group = new Group();
+        group.setGroupName("TestName");
+        group.setNumberOfStudents(34);
+        group.setMaxAge(50);
+        group.setMinAge(10);
+        when(groupRepository.findById(any())).thenReturn(Optional.of(group));
+        List<Student> students = new ArrayList<>();
+        group.setStudents(students);
         when(studentRepository.findById(any())).thenReturn(Optional.ofNullable(student));
-        when(studentMapper.studentToResponseStudentDto(any())).thenReturn(responseStudentDto);
 
         studentService.addStudentForGroup(3L, 2L);
 
@@ -109,21 +103,16 @@ public class StudentServiceTest {
 
     @Test
     public void addStudentForGroupExpectedException() {
-        ResponseGroupDto responseGroupDto = new ResponseGroupDto();
-        responseGroupDto.setGroupName("TestName");
-        responseGroupDto.setNumberOfStudents(34);
-        responseGroupDto.setMaxAge(20);
-        responseGroupDto.setMinAge(10);
-        when(groupService.getGroup(any())).thenReturn(responseGroupDto);
-        ResponseStudentDto responseStudentDto = new ResponseStudentDto();
-        ResponsePersonDto responsePersonDto = new ResponsePersonDto();
-        responsePersonDto.setAge(30);
-        responseStudentDto.setGroupId(12L);
-        responseStudentDto.setPerson(responsePersonDto);
-        List<ResponseStudentDto> responseStudentDtos = new ArrayList<>();
-        responseGroupDto.setStudents(responseStudentDtos);
+        Group group = new Group();
+        group.setGroupName("TestName");
+        group.setNumberOfStudents(34);
+        group.setMaxAge(20);
+        group.setMinAge(10);
+        when(groupRepository.findById(any())).thenReturn(Optional.of(group));
+        List<Student> students = new ArrayList<>();
+        students.add(student);
+        group.setStudents(students);
         when(studentRepository.findById(any())).thenReturn(Optional.ofNullable(student));
-        when(studentMapper.studentToResponseStudentDto(any())).thenReturn(responseStudentDto);
 
         Assertions.assertThrows(OutOfRangeAgeException.class, () -> studentService.addStudentForGroup(3L, 2L));
 
@@ -156,7 +145,7 @@ public class StudentServiceTest {
     public void getStudents() {
         List<Student> students = new ArrayList<>();
         students.add(student);
-        when(studentRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(students);
+        when(studentRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.of(new ArrayList<>()));
         List<ResponseStudentDto> responseStudentDtos = new ArrayList<>();
         ResponseStudentDto responseStudentDto = new ResponseStudentDto();
         responseStudentDtos.add(responseStudentDto);
@@ -170,7 +159,7 @@ public class StudentServiceTest {
 
     @Test
     public void getStudentsExpectedException() {
-        when(studentRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(new ArrayList<>());
+        when(studentRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(StudentNotFoundException.class, () -> studentService.getStudents(any(), any()));
     }

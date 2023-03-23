@@ -19,12 +19,9 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String numberPhone) throws UsernameNotFoundException {
-        Person person = personRepository.findByNumberPhone(numberPhone);
-
-        if(person == null) {
-            throw new UsernameNotFoundException("User " + numberPhone + " was not found in the database");
-        }
-
+        Person person = personRepository
+                .findByNumberPhone(numberPhone)
+                .orElseThrow(() -> new UsernameNotFoundException("User " + numberPhone + " was not found in the database"));
         return new User(person.getUsername(), passwordEncoder.encode(person.getPassword()), person.getAuthorities());
     }
 }

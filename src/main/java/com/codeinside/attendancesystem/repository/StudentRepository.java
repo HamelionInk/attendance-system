@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
@@ -32,7 +33,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             value = "SELECT * FROM students OFFSET :offset LIMIT :limit ",
             nativeQuery = true
     )
-    List<Student> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
-                                            @Param(value = "limit") Long limit);
+    Optional<List<Student>> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
+                                                        @Param(value = "limit") Long limit);
 
 }

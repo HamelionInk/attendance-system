@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,38 +27,34 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public ResponseGroupDto getGroup(Long groupId) {
-        Optional<Group> groupOptional = groupRepository.findById(groupId);
-        if(groupOptional.isEmpty()) {
-            throw new GroupNotFoundException();
-        }
-        return groupMapper.groupToResponseGroupDto(groupOptional.get());
+        Group group = groupRepository
+                .findById(groupId)
+                .orElseThrow(GroupNotFoundException::new);
+        return groupMapper.groupToResponseGroupDto(group);
     }
 
     @Override
     public List<ResponseGroupDto> getGroups(Long offset, Long limit) {
-        List<Group> groupList = groupRepository.selectAllWithOffsetAndLimit(offset, limit);
-        if(groupList.isEmpty()) {
-            throw new GroupNotFoundException();
-        }
+        List<Group> groupList = groupRepository
+                .selectAllWithOffsetAndLimit(offset, limit)
+                .orElseThrow(GroupNotFoundException::new);
         return groupMapper.GroupsToResponseGroupDtos(groupList);
     }
 
     @Override
     public void updateGroup(RequestGroupDto requestGroupDto, Long id) {
-        Optional<Group> groupOptional = groupRepository.findById(id);
-        if(groupOptional.isEmpty()) {
-            throw new GroupNotFoundException();
-        }
-        Group group = groupMapper.requestGroupDtoToGroupForPatch(requestGroupDto, groupOptional.get());
-        groupRepository.save(group);
+        Group group = groupRepository
+                .findById(id)
+                .orElseThrow(GroupNotFoundException::new);
+        Group groupUpdated = groupMapper.requestGroupDtoToGroupForPatch(requestGroupDto, group);
+        groupRepository.save(groupUpdated);
     }
 
     @Override
     public void deleteGroup(Long id) {
-        Optional<Group> groupOptional = groupRepository.findById(id);
-        if(groupOptional.isEmpty()) {
-            throw new GroupNotFoundException();
-        }
+        groupRepository
+                .findById(id)
+                .orElseThrow(GroupNotFoundException::new);
         groupRepository.deleteById(id);
     }
 }

@@ -4,15 +4,15 @@ services:
     build: .
     container_name: springapp
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db/attendance_system
+      SPRING_DATASOURCE_URL: jdbc:postgresql://attendance_db/attendance_system
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 12345
     ports:
-      - "8000:8081"
+      - "8000:8080"
     restart: always
     depends_on:
-      - db
-  db:
+      - attendance_db
+  attendance_db:
     image: postgres
     container_name: db
     environment:

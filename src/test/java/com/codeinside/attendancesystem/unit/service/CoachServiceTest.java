@@ -11,7 +11,6 @@ import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistExceptio
 import com.codeinside.attendancesystem.mapper.CoachMapper;
 import com.codeinside.attendancesystem.repository.CoachRepository;
 import com.codeinside.attendancesystem.repository.PersonRepository;
-import com.codeinside.attendancesystem.service.CoachService;
 import com.codeinside.attendancesystem.service.impl.CoachServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -60,7 +59,6 @@ public class CoachServiceTest {
     @Test
     public void saveCoach() {
         when(coachMapper.requestCoachDtoToCoach(any())).thenReturn(coach);
-        when(personRepository.findByNumberPhone(any())).thenReturn(null);
 
         coachService.saveCoach(any());
 
@@ -70,7 +68,7 @@ public class CoachServiceTest {
     @Test
     public void saveCoachExpectedException() {
         when(coachMapper.requestCoachDtoToCoach(any())).thenReturn(coach);
-        when(personRepository.findByNumberPhone(any())).thenReturn(new Person());
+        when(personRepository.findByNumberPhone(any())).thenReturn(Optional.of(new Person()));
 
         Assertions.assertThrows(NumberPhoneAlreadyExistException.class, () -> coachService.saveCoach(any()));
 
@@ -108,7 +106,7 @@ public class CoachServiceTest {
         responsePersonDto.setNumberPhone("89085328288");
         responseCoachDtos.add(responseCoachDto);
 
-        when(coachRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(coaches);
+        when(coachRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.of(coaches));
         when(coachMapper.coachesToResponseCoachDtos(any())).thenReturn(responseCoachDtos);
 
         coachService.getCoaches(any(), any());
@@ -118,7 +116,7 @@ public class CoachServiceTest {
 
     @Test
     public void getCoachesExpectedException() {
-        when(coachRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(new ArrayList<>());
+        when(coachRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(CoachNotFoundException.class, () -> coachService.getCoaches(any(), any()));
     }

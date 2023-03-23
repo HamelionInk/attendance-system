@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import util.validator.marker.OnCreate;
-import util.validator.marker.OnUpdate;
+import com.codeinside.attendancesystem.util.validator.marker.OnCreate;
+import com.codeinside.attendancesystem.util.validator.marker.OnUpdate;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class AdminController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseAdminDto> getAdmin(@PathVariable (name = "id") Long id) {
         ResponseAdminDto responseAdminDto = adminService.getAdmin(id);
-        return ResponseEntity.ok(responseAdminDto);
+        return new ResponseEntity<>(responseAdminDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список всех администраторов, " +
@@ -78,7 +78,7 @@ public class AdminController {
     public ResponseEntity<List<ResponseAdminDto>> getAdmins(@RequestParam (name = "offset", required = false) Long offset,
                           @RequestParam (name = "limit", required = false) Long limit) {
         List<ResponseAdminDto> responseAdminDtos = adminService.getAdmins(offset, limit);
-        return ResponseEntity.ok(responseAdminDtos);
+        return new ResponseEntity<>(responseAdminDtos, HttpStatus.OK);
     }
 
     @Operation(summary = "Обновить информацию об администраторе по его 'id' - Доступы: ADMIN")

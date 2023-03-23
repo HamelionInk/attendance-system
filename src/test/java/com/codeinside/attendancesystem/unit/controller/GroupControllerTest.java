@@ -99,7 +99,7 @@ public class GroupControllerTest {
     @Test
     public void getMappingGetGroupsStatusIsOk() throws Exception {
         mockMvc.perform(
-                        get("/groups/all")
+                        get("/groups")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(groupService, times(1)).getGroups(any(), any());
@@ -109,7 +109,7 @@ public class GroupControllerTest {
     public void getMappingGetGroupsStatusNotFound() throws Exception {
         doThrow(GroupNotFoundException.class).when(groupService).getGroups(any(), any());
         mockMvc.perform(
-                        get("/groups/all")
+                        get("/groups")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
         verify(groupService, times(1)).getGroups(any(), any());

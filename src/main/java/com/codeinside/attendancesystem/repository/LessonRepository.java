@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
@@ -16,15 +17,15 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
             value = "SELECT * FROM lessons WHERE group_id= :groupId",
             nativeQuery = true
     )
-    List<Lesson> selectClassesByGroupId(@Param(value = "groupId") Long id);
+    Optional<List<Lesson>> selectLessonsByGroupId(@Param(value = "groupId") Long id);
 
     @Modifying
     @Query(
             value = "SELECT * FROM lessons OFFSET :offset LIMIT :limit ",
             nativeQuery = true
     )
-    List<Lesson> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
-                                             @Param(value = "limit") Long limit);
+    Optional<List<Lesson>> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
+                                                       @Param(value = "limit") Long limit);
 
     @Modifying
     @Query(
@@ -36,7 +37,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Modifying
     @Query(
-            value = "UPDATE attendance SET attendance= :attendance WHERE lesson_id= :lessonId AND student_id= :studentId",
+            value = "UPDATE attendances SET attendance= :attendance WHERE lesson_id= :lessonId AND student_id= :studentId",
             nativeQuery = true
     )
     void updateAttendanceLessonForStudent(@Param(value = "lessonId") Long lessonId,

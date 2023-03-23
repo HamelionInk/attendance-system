@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
@@ -17,6 +18,6 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
             value = "SELECT * FROM administrations OFFSET :offset LIMIT :limit ",
             nativeQuery = true
     )
-    List<Admin> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
-                                            @Param(value = "limit") Long limit);
+    Optional<List<Admin>> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
+                                                      @Param(value = "limit") Long limit);
 }

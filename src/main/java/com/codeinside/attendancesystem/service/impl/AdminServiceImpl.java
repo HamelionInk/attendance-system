@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -33,49 +32,44 @@ public class AdminServiceImpl implements AdminService {
     }
 
     public void numberPhoneAlreadyExist(String numberPhone) {
-        if(personRepository.findByNumberPhone(numberPhone) != null) {
+        if(personRepository.findByNumberPhone(numberPhone).isPresent()) {
             throw new NumberPhoneAlreadyExistException();
         }
     }
 
     @Override
     public ResponseAdminDto getAdmin(Long id) {
-        Optional<Admin> adminOptional = adminRepository.findById(id);
-        if(adminOptional.isEmpty()) {
-            throw new AdminNotFoundException();
-        }
-        return adminMapper.adminToResponseAdminDto(adminOptional.get());
+        Admin admin = adminRepository
+                .findById(id)
+                .orElseThrow(AdminNotFoundException::new);
+        return adminMapper.adminToResponseAdminDto(admin);
     }
 
     @Override
     public List<ResponseAdminDto> getAdmins(Long offset, Long limit) {
-        List<Admin> admins = adminRepository.selectAllWithOffsetAndLimit(offset, limit);
-        if(admins.isEmpty()) {
-            throw new AdminNotFoundException();
-        }
+        List<Admin> admins = adminRepository
+                .selectAllWithOffsetAndLimit(offset, limit)
+                .orElseThrow(AdminNotFoundException::new);
         return adminMapper.adminsToResponseAdminDtos(admins);
     }
 
     @Override
     public void updateAdmin(Long id, RequestAdminDto requestAdminDto) {
-        Optional<Admin> adminOptional = adminRepository.findById(id);
-        if(adminOptional.isEmpty()) {
-            throw new AdminNotFoundException();
-        }
-        Admin admin = adminMapper.requestAdminDtoToAdminForPatch(requestAdminDto, adminOptional.get());
+        Admin admin = adminRepository
+                .findById(id)
+                .orElseThrow(AdminNotFoundException::new);
+        Admin adminUpdated = adminMapper.requestAdminDtoToAdminForPatch(requestAdminDto, admin);
         if(requestAdminDto.getPerson().getNumberPhone() != null) {
-            numberPhoneAlreadyExist(admin.getPerson().getNumberPhone());
+            numberPhoneAlreadyExist(adminUpdated.getPerson().getNumberPhone());
         }
-        adminRepository.save(admin);
+        adminRepository.save(adminUpdated);
     }
 
     @Override
     public void deleteAdmin(Long id) {
-        Optional<Admin> adminOptional = adminRepository.findById(id);
-        if(adminOptional.isEmpty()) {
-            throw new AdminNotFoundException();
-        }
+        adminRepository
+                .findById(id)
+                .orElseThrow(AdminNotFoundException::new);
         adminRepository.deleteById(id);
-
     }
 }

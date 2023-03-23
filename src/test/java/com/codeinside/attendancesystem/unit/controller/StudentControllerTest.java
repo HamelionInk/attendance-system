@@ -161,7 +161,7 @@ public class StudentControllerTest {
     @Test
     public void getMappingGetStudentsStatusIsOk() throws Exception {
         mockMvc.perform(
-                        get("/students/all")
+                        get("/students")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(studentService, times(1)).getStudents(any(), any());
@@ -171,7 +171,7 @@ public class StudentControllerTest {
     public void getMappingGetStudentsStatusNotFound() throws Exception {
         doThrow(StudentNotFoundException.class).when(studentService).getStudents(any(), any());
         mockMvc.perform(
-                        get("/students/all")
+                        get("/students")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
         verify(studentService, times(1)).getStudents(any(), any());

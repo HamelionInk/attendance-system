@@ -82,7 +82,7 @@ public class GroupServiceTest {
     public void getGroups() {
         List<Group> groups = new ArrayList<>();
         groups.add(group);
-        when(groupRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(groups);
+        when(groupRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.of(groups));
         List<ResponseGroupDto> responseGroupDtos = new ArrayList<>();
         ResponseGroupDto responseGroupDto = new ResponseGroupDto();
         responseGroupDto.setGroupName(group.getGroupName());
@@ -96,7 +96,7 @@ public class GroupServiceTest {
 
     @Test
     public void getGroupsExpectedException() {
-        when(groupRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(new ArrayList<>());
+        when(groupRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(GroupNotFoundException.class, () -> groupService.getGroups(any(),any()));
     }

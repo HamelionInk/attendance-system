@@ -1,25 +1,25 @@
 package com.codeinside.attendancesystem.service.impl;
 
 import com.codeinside.attendancesystem.dto.request.RequestStudentDto;
-import com.codeinside.attendancesystem.dto.response.ResponseGroupDto;
 import com.codeinside.attendancesystem.dto.response.ResponseStudentDto;
+import com.codeinside.attendancesystem.entity.Group;
 import com.codeinside.attendancesystem.entity.Student;
 import com.codeinside.attendancesystem.enums.TypeUser;
+import com.codeinside.attendancesystem.exception.GroupNotFoundException;
 import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistException;
 import com.codeinside.attendancesystem.exception.OutOfNumberOfStudentsException;
 import com.codeinside.attendancesystem.exception.OutOfRangeAgeException;
 import com.codeinside.attendancesystem.exception.StudentNotFoundException;
 import com.codeinside.attendancesystem.mapper.StudentMapper;
+import com.codeinside.attendancesystem.repository.GroupRepository;
 import com.codeinside.attendancesystem.repository.PersonRepository;
 import com.codeinside.attendancesystem.repository.StudentRepository;
-import com.codeinside.attendancesystem.service.GroupService;
 import com.codeinside.attendancesystem.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentMapper studentMapper;
     private final StudentRepository studentRepository;
     private final PersonRepository personRepository;
-    private final GroupService groupService;
+    private final GroupRepository groupRepository;
 
     @Override
     public void saveStudent(RequestStudentDto requestStudentDto) {
@@ -39,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public void numberPhoneAlreadyExist(String numberPhone) {
-        if(personRepository.findByNumberPhone(numberPhone) != null) {
+        if(personRepository.findByNumberPhone(numberPhone).isPresent()) {
             throw new NumberPhoneAlreadyExistException();
         }
     }
@@ -47,14 +47,18 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     @Override
     public void addStudentForGroup(Long studentId, Long groupId) {
-        ResponseGroupDto responseGroupDto = groupService.getGroup(groupId);
-        ResponseStudentDto responseStudentDto = getStudent(studentId);
+        Group group = groupRepository
+                .findById(groupId)
+                .orElseThrow(GroupNotFoundException::new);
+        Student student = studentRepository
+                .findById(studentId)
+                .orElseThrow(StudentNotFoundException::new);
 
-        if(!checkRangeAge(responseGroupDto.getMinAge(), responseGroupDto.getMaxAge(), responseStudentDto.getPerson().getAge())) {
+        if(!checkRangeAge(group.getMinAge(), group.getMaxAge(), student.getPerson().getAge())) {
             throw new OutOfRangeAgeException();
         }
 
-        if(!checkOutOfNumberOfStudents(responseGroupDto.getStudents().size(), responseGroupDto.getNumberOfStudents())) {
+        if(!checkOutOfNumberOfStudents(group.getStudents().size(), group.getNumberOfStudents())) {
             throw new OutOfNumberOfStudentsException();
         }
 
@@ -71,51 +75,46 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ResponseStudentDto getStudent(Long id) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if(studentOptional.isEmpty()) {
-            throw new StudentNotFoundException();
-        }
-        return studentMapper.studentToResponseStudentDto(studentOptional.get());
+        Student student = studentRepository
+                .findById(id)
+                .orElseThrow(StudentNotFoundException::new);
+        return studentMapper.studentToResponseStudentDto(student);
     }
 
     @Override
     public List<ResponseStudentDto> getStudents(Long offset, Long limit) {
-        List<Student> students = studentRepository.selectAllWithOffsetAndLimit(offset, limit);
-        if(students.isEmpty()) {
-            throw new StudentNotFoundException();
-        }
+        List<Student> students = studentRepository
+                .selectAllWithOffsetAndLimit(offset, limit)
+                .orElseThrow(StudentNotFoundException::new);
         return studentMapper.studentsToResponseStudentDtos(students);
     }
 
     @Override
     public void updateStudent(RequestStudentDto requestStudentDto, Long id) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if(studentOptional.isEmpty()) {
-            throw new StudentNotFoundException();
-        }
-        Student student = studentMapper.requestStudentDtoToStudentForPatch(requestStudentDto, studentOptional.get());
+        Student student = studentRepository
+                .findById(id)
+                .orElseThrow(StudentNotFoundException::new);
+        Student studentUpdated = studentMapper.requestStudentDtoToStudentForPatch(requestStudentDto, student);
         if(requestStudentDto.getPerson().getNumberPhone() != null) {
             numberPhoneAlreadyExist(student.getPerson().getNumberPhone());
         }
-        studentRepository.save(student);
+        studentRepository.save(studentUpdated);
     }
 
     @Transactional
     @Override
     public void excludeStudentForGroup(Long studentId) {
-        Optional<Student> studentOptional = studentRepository.findById(studentId);
-        if(studentOptional.isEmpty()) {
-            throw new StudentNotFoundException();
-        }
+        studentRepository
+                .findById(studentId)
+                .orElseThrow(StudentNotFoundException::new);
         studentRepository.updateGroupIdValueOnNullForStudent(studentId);
     }
 
     @Override
     public void deleteStudent(Long id) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if(studentOptional.isEmpty()) {
-            throw new StudentNotFoundException();
-        }
+        studentRepository
+                .findById(id)
+                .orElseThrow(StudentNotFoundException::new);
         studentRepository.deleteById(id);
     }
 }

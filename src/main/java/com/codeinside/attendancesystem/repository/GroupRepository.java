@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
@@ -17,7 +18,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             value = "SELECT * FROM groups OFFSET :offset LIMIT :limit ",
             nativeQuery = true
     )
-    List<Group> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
-                                            @Param(value = "limit") Long limit);
+    Optional<List<Group>> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
+                                                      @Param(value = "limit") Long limit);
 
 }

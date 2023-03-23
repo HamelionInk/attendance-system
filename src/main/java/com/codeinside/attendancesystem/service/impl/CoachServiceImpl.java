@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,46 +32,44 @@ public class CoachServiceImpl implements CoachService {
     }
 
     public void numberPhoneAlreadyExist(String numberPhone) {
-        if(personRepository.findByNumberPhone(numberPhone) != null) {
+        if(personRepository.findByNumberPhone(numberPhone).isPresent()) {
             throw new NumberPhoneAlreadyExistException();
         }
     }
 
     @Override
     public ResponseCoachDto getCoach(Long id) {
-        Optional<Coach> coachOptional = coachRepository.findById(id);
-        Coach coach = coachOptional.orElseThrow(CoachNotFoundException::new);
+        Coach coach = coachRepository
+                .findById(id)
+                .orElseThrow(CoachNotFoundException::new);
         return coachMapper.coachToResponseCoachDto(coach);
     }
 
     @Override
     public List<ResponseCoachDto> getCoaches(Long offset, Long limit) {
-        List<Coach> coaches = coachRepository.selectAllWithOffsetAndLimit(offset, limit);
-        if(coaches.isEmpty()) {
-            throw new CoachNotFoundException();
-        }
+        List<Coach> coaches = coachRepository
+                .selectAllWithOffsetAndLimit(offset, limit)
+                .orElseThrow(CoachNotFoundException::new);
         return coachMapper.coachesToResponseCoachDtos(coaches);
     }
 
     @Override
     public void updateCoach(RequestCoachDto requestCoachDto, Long id) {
-        Optional<Coach> coachOptional = coachRepository.findById(id);
-        if(coachOptional.isEmpty()) {
-            throw new CoachNotFoundException();
-        }
-        Coach coach = coachMapper.requestCoachDtoToCoachForPatch(requestCoachDto, coachOptional.get());
+        Coach coach = coachRepository
+                .findById(id)
+                .orElseThrow(CoachNotFoundException::new);
+        Coach coachUpdated = coachMapper.requestCoachDtoToCoachForPatch(requestCoachDto, coach);
         if(requestCoachDto.getPerson().getNumberPhone() != null) {
-            numberPhoneAlreadyExist(coach.getPerson().getNumberPhone());
+            numberPhoneAlreadyExist(coachUpdated.getPerson().getNumberPhone());
         }
-        coachRepository.save(coach);
+        coachRepository.save(coachUpdated);
     }
 
     @Override
     public void deleteCoach(Long id) {
-        Optional<Coach> coachOptional = coachRepository.findById(id);
-        if(coachOptional.isEmpty()) {
-            throw new CoachNotFoundException();
-        }
+        coachRepository
+                .findById(id)
+                .orElseThrow(CoachNotFoundException::new);
         coachRepository.deleteById(id);
     }
 }

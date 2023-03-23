@@ -110,7 +110,7 @@ public class AdminControllerTest {
     @Test
     public void getMappingGetAdminsStatusIsOk() throws Exception {
         mockMvc.perform(
-                get("/admins/all")
+                get("/admins")
         ).andExpect(status().isOk());
         verify(adminService, times(1)).getAdmins(any(), any());
 
@@ -120,7 +120,7 @@ public class AdminControllerTest {
     public void getMappingGetAdminsStatusNotFound() throws Exception {
         doThrow(AdminNotFoundException.class).when(adminService).getAdmins(any(), any());
         mockMvc.perform(
-                get("/admins/all")
+                get("/admins")
         ).andExpect(status().isNotFound());
         verify(adminService, times(1)).getAdmins(any(), any());
 

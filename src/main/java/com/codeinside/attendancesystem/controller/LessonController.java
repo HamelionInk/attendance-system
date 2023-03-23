@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import util.validator.marker.OnCreate;
-import util.validator.marker.OnUpdate;
+import com.codeinside.attendancesystem.util.validator.marker.OnCreate;
+import com.codeinside.attendancesystem.util.validator.marker.OnUpdate;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class LessonController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseLessonDto> getLesson(@PathVariable (name = "id") Long id) {
         ResponseLessonDto responseLessonDto = lessonService.getLesson(id);
-        return ResponseEntity.ok(responseLessonDto);
+        return new ResponseEntity<>(responseLessonDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список занятий в школе, для пагинации используются необязательные параметры offset и limit - Доступы: ADMIN, TRAINER, STUDENT")
@@ -76,7 +76,7 @@ public class LessonController {
     public ResponseEntity<List<ResponseLessonDto>> getLessons(@RequestParam(name = "offset", required = false) Long offset,
                                                               @RequestParam (name = "limit", required = false) Long limit) {
         List<ResponseLessonDto> responseLessonDtoList = lessonService.getLessons(offset, limit);
-        return ResponseEntity.ok(responseLessonDtoList);
+        return new ResponseEntity<>(responseLessonDtoList, HttpStatus.OK);
     }
 
     @Operation(summary = "Получить информацию о занятиях студента по его 'id' - Доступы: ADMIN, TRAINER, STUDENT")
@@ -89,7 +89,7 @@ public class LessonController {
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<ResponseLessonDto>> getLessonsForStudents(@PathVariable (name = "studentId") Long id) {
         List<ResponseLessonDto> responseLessonDtoList = lessonService.getLessonsForStudent(id);
-        return ResponseEntity.ok(responseLessonDtoList);
+        return new ResponseEntity<>(responseLessonDtoList, HttpStatus.OK);
     }
 
     @Operation(summary = "Обновить присутствие студента по его 'id' и по 'id' занятия - Доступы: ADMIN, TRAINER, STUDENT")

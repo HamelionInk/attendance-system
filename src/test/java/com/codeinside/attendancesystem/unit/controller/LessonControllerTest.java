@@ -104,7 +104,7 @@ public class LessonControllerTest {
     @Test
     public void getMappingGetLessonsStatusIsOk() throws Exception {
         mockMvc.perform(
-                        get("/lessons/all")
+                        get("/lessons")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(lessonService, times(1)).getLessons(any(), any());
@@ -114,7 +114,7 @@ public class LessonControllerTest {
     public void getMappingGetLessonsStatusNotFound() throws Exception {
         doThrow(LessonNotFoundException.class).when(lessonService).getLessons(any(), any());
         mockMvc.perform(
-                        get("/lessons/all")
+                        get("/lessons")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
         verify(lessonService, times(1)).getLessons(any(), any());

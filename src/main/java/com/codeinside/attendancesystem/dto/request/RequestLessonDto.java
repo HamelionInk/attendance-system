@@ -2,8 +2,8 @@ package com.codeinside.attendancesystem.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import util.validator.marker.OnCreate;
-import util.validator.marker.OnUpdate;
+import com.codeinside.attendancesystem.util.validator.marker.OnCreate;
+import com.codeinside.attendancesystem.util.validator.marker.OnUpdate;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;

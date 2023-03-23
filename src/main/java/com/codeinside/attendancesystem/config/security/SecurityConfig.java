@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/swagger-ui/index.html")
+                .defaultSuccessUrl("/swagger-ui/index.html", true)
                 .and()
                 .logout()
                 .logoutUrl("/perform_logout")

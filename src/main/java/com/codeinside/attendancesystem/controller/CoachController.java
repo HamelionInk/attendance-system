@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import util.validator.marker.OnCreate;
-import util.validator.marker.OnUpdate;
+import com.codeinside.attendancesystem.util.validator.marker.OnCreate;
+import com.codeinside.attendancesystem.util.validator.marker.OnUpdate;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class CoachController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseCoachDto> getCoach(@PathVariable (name = "id") Long id) {
         ResponseCoachDto responseCoachDto = coachService.getCoach(id);
-        return ResponseEntity.ok(responseCoachDto);
+        return new ResponseEntity<>(responseCoachDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список всех тренеров, для пагинации используются необязательные параметры offset и limit - Доступы: ADMIN, TRAINER, STUDENT")
@@ -77,7 +77,7 @@ public class CoachController {
     public ResponseEntity<List<ResponseCoachDto>> getCoaches(@RequestParam (name = "offset", required = false) Long offset,
                                                              @RequestParam (name = "limit", required = false) Long limit) {
         List<ResponseCoachDto> responseTrainersDto = coachService.getCoaches(offset, limit);
-        return ResponseEntity.ok(responseTrainersDto);
+        return new ResponseEntity<>(responseTrainersDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Обновить информацию о тренере по его 'id' - Доступы: ADMIN")

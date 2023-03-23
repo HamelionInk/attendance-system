@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import util.validator.marker.OnCreate;
-import util.validator.marker.OnUpdate;
+import com.codeinside.attendancesystem.util.validator.marker.OnCreate;
+import com.codeinside.attendancesystem.util.validator.marker.OnUpdate;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class GroupController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseGroupDto> getGroup(@PathVariable (name = "id") Long groupId) {
         ResponseGroupDto responseGroupDto = groupService.getGroup(groupId);
-        return ResponseEntity.ok(responseGroupDto);
+        return new ResponseEntity<>(responseGroupDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Получить информацию о всех группах, для пагинации используются необязательные параметры offset и limit - Доступы: ADMIN, TRAINER, STUDENT")
@@ -75,7 +75,7 @@ public class GroupController {
     public ResponseEntity<List<ResponseGroupDto>> getGroups(@RequestParam (name = "offset", required = false) Long offset,
                                                             @RequestParam (name = "limit", required = false) Long limit) {
         List<ResponseGroupDto> responseGroupDtos = groupService.getGroups(offset, limit);
-        return ResponseEntity.ok(responseGroupDtos);
+        return new ResponseEntity<>(responseGroupDtos, HttpStatus.OK);
     }
 
     @Operation(summary = "Обновить информацию о группе по ее 'id' - Доступы: ADMIN")

@@ -53,15 +53,16 @@ public class AdminServiceTest {
     @Test
     public void saveAdmin() {
         when(adminMapper.requestAdminDtoToAdmin(any())).thenReturn(admin);
-        when(personRepository.findByNumberPhone(admin.getPerson().getNumberPhone())).thenReturn(null);
+
         adminService.saveAdmin(any());
+
         verify(adminRepository, times(1)).save(any());
     }
 
     @Test
     public void saveAdminExpectedException() {
         when(adminMapper.requestAdminDtoToAdmin(any())).thenReturn(admin);
-        when(personRepository.findByNumberPhone(admin.getPerson().getNumberPhone())).thenReturn(new Person());
+        when(personRepository.findByNumberPhone(admin.getPerson().getNumberPhone())).thenReturn(Optional.of(new Person()));
 
         Assertions.assertThrows(NumberPhoneAlreadyExistException.class, () -> adminService.saveAdmin(any()));
 
@@ -103,7 +104,7 @@ public class AdminServiceTest {
         List<ResponseAdminDto> responseAdminDtos = new ArrayList<>();
         responseAdminDtos.add(responseAdminDto);
 
-        when(adminRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(admins);
+        when(adminRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.of(admins));
         when(adminMapper.adminsToResponseAdminDtos(any())).thenReturn(responseAdminDtos);
         adminService.getAdmins(any(), any());
 
@@ -113,7 +114,7 @@ public class AdminServiceTest {
 
     @Test
     public void getAdminsExpectedException() {
-        when(adminRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(new ArrayList<>());
+        when(adminRepository.selectAllWithOffsetAndLimit(any(), any())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(AdminNotFoundException.class, () -> adminService.getAdmins(any(), any()));
 
@@ -152,7 +153,7 @@ public class AdminServiceTest {
 
         when(adminRepository.findById(any())).thenReturn(Optional.ofNullable(admin));
         when(adminMapper.requestAdminDtoToAdminForPatch(any(), any())).thenReturn(admin);
-        when(personRepository.findByNumberPhone(any())).thenReturn(admin.getPerson());
+        when(personRepository.findByNumberPhone(any())).thenReturn(Optional.ofNullable(admin.getPerson()));
 
         Assertions.assertThrows(NumberPhoneAlreadyExistException.class, () -> adminService.updateAdmin(any(), requestAdminDto));
         verify(adminRepository, times(0)).save(any());

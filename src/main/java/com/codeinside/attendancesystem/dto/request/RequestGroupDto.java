@@ -1,9 +1,9 @@
 package com.codeinside.attendancesystem.dto.request;
 
 import lombok.Data;
-import util.annotation.MinLessMaxAge;
-import util.validator.marker.OnCreate;
-import util.validator.marker.OnUpdate;
+import com.codeinside.attendancesystem.util.annotation.MinLessMaxAge;
+import com.codeinside.attendancesystem.util.validator.marker.OnCreate;
+import com.codeinside.attendancesystem.util.validator.marker.OnUpdate;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

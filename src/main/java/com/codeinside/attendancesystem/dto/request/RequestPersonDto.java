@@ -1,9 +1,9 @@
 package com.codeinside.attendancesystem.dto.request;
 
 import lombok.Data;
-import util.annotation.PasswordMatches;
-import util.validator.marker.OnCreate;
-import util.validator.marker.OnUpdate;
+import com.codeinside.attendancesystem.util.annotation.PasswordMatches;
+import com.codeinside.attendancesystem.util.validator.marker.OnCreate;
+import com.codeinside.attendancesystem.util.validator.marker.OnUpdate;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@PasswordMatches(groups = OnCreate.class)
+@PasswordMatches(groups = {OnCreate.class, OnUpdate.class})
 @Data
 public class RequestPersonDto {
 

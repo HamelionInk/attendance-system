@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CoachRepository extends JpaRepository<Coach, Long> {
@@ -17,6 +18,6 @@ public interface CoachRepository extends JpaRepository<Coach, Long> {
             value = "SELECT * FROM coaches OFFSET :offset LIMIT :limit ",
             nativeQuery = true
     )
-    List<Coach> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
-                                             @Param(value = "limit") Long limit);
+    Optional<List<Coach>> selectAllWithOffsetAndLimit(@Param(value = "offset") Long offset,
+                                                      @Param(value = "limit") Long limit);
 }

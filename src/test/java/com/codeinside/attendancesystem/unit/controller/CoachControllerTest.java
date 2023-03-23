@@ -6,7 +6,6 @@ import com.codeinside.attendancesystem.dto.request.RequestPersonDto;
 import com.codeinside.attendancesystem.exception.CoachNotFoundException;
 import com.codeinside.attendancesystem.exception.NumberPhoneAlreadyExistException;
 import com.codeinside.attendancesystem.exception.handler.ResponseExceptionHandler;
-import com.codeinside.attendancesystem.repository.CoachRepository;
 import com.codeinside.attendancesystem.service.CoachService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -19,8 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.Period;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -116,7 +113,7 @@ public class CoachControllerTest {
     @Test
     public void getMappingGetCoachesStatusIsOk() throws Exception {
         mockMvc.perform(
-                        get("/coaches/all")
+                        get("/coaches")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(coachService, times(1)).getCoaches(any(), any());
@@ -126,7 +123,7 @@ public class CoachControllerTest {
     public void getMappingGetCoachesStatusNotFound() throws Exception {
         doThrow(CoachNotFoundException.class).when(coachService).getCoaches(any(), any());
         mockMvc.perform(
-                        get("/coaches/all")
+                        get("/coaches")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
         verify(coachService, times(1)).getCoaches(any(), any());
